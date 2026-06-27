@@ -1,0 +1,48 @@
+{
+  "name": "@scadable/wizard",
+  "version": "0.1.0",
+  "description": "The SCADABLE setup wizard. Wires SCADABLE into your codebase (privacy policy now, more to come).",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "scadable-wizard": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "scadable",
+    "privacy",
+    "privacy-policy",
+    "compliance",
+    "wizard",
+    "cli",
+    "setup"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "picocolors": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scadable/sdk.git",
+    "directory": "wizard"
+  }
+}

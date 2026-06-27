@@ -5,6 +5,7 @@ Public client libraries for SCADABLE. Each framework lives in its own folder.
 | Package | Folder | What it does |
 | --- | --- | --- |
 | [`@scadable/privacy`](./next) | [`next/`](./next) | Render your always-current privacy policy in a Next.js app. |
+| [`@scadable/wizard`](./wizard) | [`wizard/`](./wizard) | The `npx` setup wizard. Wires SCADABLE into your codebase (privacy policy now, more later). |
 
 These libraries only ever talk to the public SCADABLE API (`https://api.scadable.com`).
 They contain no secrets and no server code.
