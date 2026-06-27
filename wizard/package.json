@@ -1,6 +1,6 @@
 {
   "name": "@scadable/wizard",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "The SCADABLE setup wizard. Wires SCADABLE into your codebase (privacy policy now, more to come).",
   "license": "MIT",
   "type": "module",

@@ -1,6 +1,6 @@
 {
   "name": "@scadable/privacy",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Render your always-current SCADABLE privacy policy in a Next.js app.",
   "license": "MIT",
   "type": "module",
@@ -20,7 +20,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node scripts/postbuild-directives.mjs",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build"

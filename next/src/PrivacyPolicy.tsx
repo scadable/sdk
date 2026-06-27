@@ -1,6 +1,5 @@
-import * as React from 'react';
-
 import { fetchPolicy } from './client';
+import { PolicyLive } from './PolicyLive';
 import type { FetchPolicyOptions } from './types';
 
 export interface PrivacyPolicyProps extends FetchPolicyOptions {
@@ -13,12 +12,14 @@ export interface PrivacyPolicyProps extends FetchPolicyOptions {
 }
 
 /**
- * A React Server Component that renders your always-current privacy policy.
+ * Renders your always-current privacy policy.
  *
- * It is server-rendered, so the legal text is in the initial HTML (crawlable),
- * and cached via Next.js ISR (the `revalidate` option), so it stays current
- * without fetching on every request. The HTML comes from the SCADABLE API
- * (your own published, trusted content), injected as a content fragment.
+ * Hybrid by design. The policy HTML is fetched at build / server-render time and baked
+ * into the static HTML, so the legal text and the "by scadable.com" backlink are
+ * crawlable for SEO and paint instantly. It is then re-fetched in the browser (see
+ * {@link PolicyLive}) so edits you make in SCADABLE go live with no redeploy on your
+ * side. If a strict Content-Security-Policy blocks the browser fetch, the baked copy
+ * stays put, so the page is never blank.
  *
  * ```tsx
  * import { PrivacyPolicy } from '@scadable/privacy';
@@ -36,14 +37,15 @@ export async function PrivacyPolicy({
 }: PrivacyPolicyProps) {
   const policy = await fetchPolicy(token, options);
   return (
-    <div className={className}>
-      <div dangerouslySetInnerHTML={{ __html: policy.html }} />
-      {showVersion && policy.updated_at ? (
-        <p style={{ fontSize: 12, color: '#9ca3af', marginTop: 24 }}>
-          Version {policy.version}. Last updated{' '}
-          {new Date(policy.updated_at).toLocaleDateString()}.
-        </p>
-      ) : null}
-    </div>
+    <PolicyLive
+      token={token}
+      initialHtml={policy.html}
+      initialVersion={policy.version}
+      initialUpdatedAt={policy.updated_at}
+      className={className}
+      showVersion={showVersion}
+      baseUrl={options.baseUrl}
+      docType={options.docType}
+    />
   );
 }

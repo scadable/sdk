@@ -311,6 +311,9 @@ async function main(): Promise<void> {
     ``,
     pc.dim('It stays current. Update your policy in SCADABLE and every page'),
     pc.dim('updates automatically. No redeploy.'),
+    ``,
+    pc.dim('Using a Content-Security-Policy? Add api.scadable.com to connect-src'),
+    pc.dim('so the page can refresh live (it falls back to the saved copy if not).'),
   ].join('\n');
   note(payoff, pc.green('Your privacy page is ready'));
   outro(`${pc.green('Done.')} ${pc.dim('Commit and deploy, and you are live.')}`);
