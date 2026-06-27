@@ -1,0 +1,48 @@
+name: Publish packages
+
+# Publishes any workspace whose package.json version is not yet on npm. Runs when a
+# GitHub Release is published (or manually from the Actions tab).
+#
+# Auth is npm Trusted Publishing (OIDC): NO token, NO 2FA prompt - npm verifies this
+# workflow's GitHub identity directly. Each package must be registered once as a
+# Trusted Publisher on npmjs.com (Package settings -> Publishing access -> GitHub
+# Actions: org "scadable", repo "sdk", workflow "publish.yml"). After that, cutting a
+# release publishes whatever version is new.
+on:
+  release:
+    types: [published]
+  workflow_dispatch: {}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write          # required for OIDC trusted publishing + provenance
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Trusted publishing needs a recent npm; pin to a version that supports OIDC.
+      - run: npm install -g npm@latest
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Publish workspaces whose version is new
+        run: |
+          set -e
+          for dir in next wizard; do
+            name=$(node -p "require('./$dir/package.json').name")
+            ver=$(node -p "require('./$dir/package.json').version")
+            if npm view "$name@$ver" version >/dev/null 2>&1; then
+              echo "skip $name@$ver (already on npm)"
+            else
+              echo "publish $name@$ver"
+              ( cd "$dir" && npm publish --access public --provenance )
+            fi
+          done
