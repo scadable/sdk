@@ -4,7 +4,7 @@ Public client libraries for SCADABLE. Each framework lives in its own folder.
 
 | Package | Folder | What it does |
 | --- | --- | --- |
-| [`@scadable/privacy-next`](./next) | [`next/`](./next) | Render your always-current privacy policy in a Next.js app. |
+| [`@scadable/privacy`](./next) | [`next/`](./next) | Render your always-current privacy policy in a Next.js app. |
 
 These libraries only ever talk to the public SCADABLE API (`https://api.scadable.com`).
 They contain no secrets and no server code.

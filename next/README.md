@@ -1,4 +1,4 @@
-# @scadable/privacy-next
+# @scadable/privacy
 
 Render your always-current privacy policy in a Next.js app. You publish the policy once
 in the SCADABLE app; this component shows whatever version is currently published, so
@@ -7,7 +7,7 @@ updating your policy never means a redeploy on your side.
 ## Install
 
 ```bash
-npm install @scadable/privacy-next
+npm install @scadable/privacy
 ```
 
 ## Use (App Router)
@@ -16,7 +16,7 @@ Drop the component on your privacy page. It is a Server Component, so the policy
 server-rendered (good for SEO) and cached.
 
 ```tsx
-import { PrivacyPolicy } from '@scadable/privacy-next';
+import { PrivacyPolicy } from '@scadable/privacy';
 
 export default function PrivacyPage() {
   return (
@@ -45,7 +45,7 @@ Get `YOUR_PUBLIC_TOKEN` from the SCADABLE app after you publish a policy.
 If you want to render it yourself:
 
 ```ts
-import { fetchPolicy } from '@scadable/privacy-next';
+import { fetchPolicy } from '@scadable/privacy';
 
 const policy = await fetchPolicy('YOUR_PUBLIC_TOKEN');
 // { scope_name, domain, version, effective_date, updated_at, html }

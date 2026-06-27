@@ -1,5 +1,5 @@
 {
-  "name": "@scadable/privacy-next",
+  "name": "@scadable/privacy",
   "version": "0.1.0",
   "description": "Render your always-current SCADABLE privacy policy in a Next.js app.",
   "license": "MIT",

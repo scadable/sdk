@@ -11,7 +11,7 @@ export const DEFAULT_BASE_URL = 'https://api.scadable.com';
  */
 export async function fetchPolicy(token: string, options: FetchPolicyOptions = {}): Promise<Policy> {
   if (!token) {
-    throw new Error('@scadable/privacy-next: a policy token is required');
+    throw new Error('@scadable/privacy: a policy token is required');
   }
   const baseUrl = (options.baseUrl ?? DEFAULT_BASE_URL).replace(/\/$/, '');
   const docType = options.docType ?? 'privacy_policy';
@@ -26,7 +26,7 @@ export async function fetchPolicy(token: string, options: FetchPolicyOptions = {
 
   const res = await fetch(url, init);
   if (!res.ok) {
-    throw new Error(`@scadable/privacy-next: failed to load policy (${res.status}) for token "${token}"`);
+    throw new Error(`@scadable/privacy: failed to load policy (${res.status}) for token "${token}"`);
   }
   return (await res.json()) as Policy;
 }

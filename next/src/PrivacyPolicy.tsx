@@ -21,7 +21,7 @@ export interface PrivacyPolicyProps extends FetchPolicyOptions {
  * (your own published, trusted content), injected as a content fragment.
  *
  * ```tsx
- * import { PrivacyPolicy } from '@scadable/privacy-next';
+ * import { PrivacyPolicy } from '@scadable/privacy';
  *
  * export default function Page() {
  *   return <PrivacyPolicy token="YOUR_PUBLIC_TOKEN" />;
