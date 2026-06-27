@@ -1,0 +1,17 @@
+{
+  "name": "@scadable/sdk",
+  "private": true,
+  "description": "SCADABLE client libraries. Public. Each framework lives in its own folder.",
+  "license": "MIT",
+  "workspaces": [
+    "next"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scadable/sdk.git"
+  }
+}
