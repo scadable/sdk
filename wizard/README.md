@@ -68,7 +68,7 @@ if it looks like it contains secrets.
 | --- | --- | --- |
 | `--token <token>` | required | Install token from the SCADABLE app. |
 | `--doc-type <type>` | ask | `privacy`, `terms`, or `both` (privacy if non-interactive). |
-| `--api <url>` | `https://api.scadable.com` | API base. |
+| `--api <url>` | `https://policy.scadable.com` | API base. |
 | `--dry-run` | off | Show the plan, write nothing. |
 | `--yes`, `-y` | off | Skip confirmation prompts (non-interactive). |
 | `--patch <file>` | off | Add the privacy policy to an existing page instead of creating one. |
@@ -81,5 +81,5 @@ The package manager is detected from your lockfile (`pnpm-lock.yaml` -> pnpm,
 
 - This package only talks to the public SCADABLE API. It stores no secrets.
 - It is meant to be run once, via `npx`, to connect a repo.
-- Using a strict Content-Security-Policy? Add `api.scadable.com` to `connect-src`
+- Using a strict Content-Security-Policy? Add `policy.scadable.com` to `connect-src`
   so the page can refresh live (it falls back to the baked copy if not).

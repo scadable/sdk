@@ -15,7 +15,7 @@ import type { Policy } from '@scadable/core';
  * run JavaScript), with this tiny script layered on top to swap that snapshot
  * for the live version in the browser. We render into LIGHT DOM (never an
  * iframe, never a shadow root) so the host page's fonts and colors flow in and
- * the backlink is credited to the host page, not to api.scadable.com.
+ * the backlink is credited to the host page, not to policy.scadable.com.
  */
 
 /** CSS class that marks a plain `<div>` as a policy mount point. */
@@ -36,7 +36,7 @@ export interface MountOptions {
   token: string;
   /** Which document to fetch. Default {@link DEFAULT_DOC_TYPE}. */
   docType?: string;
-  /** Override the API base. Default `https://api.scadable.com`. */
+  /** Override the API base. Default `https://policy.scadable.com`. */
   baseUrl?: string;
 }
 

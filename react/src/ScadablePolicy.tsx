@@ -14,7 +14,7 @@ export interface ScadablePolicyProps {
   className?: string;
   /** Show a small "Version N, last updated ..." line under the document. Default false. */
   showVersion?: boolean;
-  /** Override the API base. Default "https://api.scadable.com". */
+  /** Override the API base. Default "https://policy.scadable.com". */
   baseUrl?: string;
   /**
    * HTML you already fetched (a host that did its own SSR or build-time fetch can

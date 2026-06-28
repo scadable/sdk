@@ -58,7 +58,7 @@ further action.
 ## The API this talks to
 
 ```
-GET https://api.scadable.com/policy/{token}?doc_type={privacy_policy|terms_of_use}&format={json|html|fragment}
+GET https://policy.scadable.com/policy/{token}?doc_type={privacy_policy|terms_of_use}&format={json|html|fragment}
 ```
 
 `format=fragment` returns a self-styled HTML fragment (scoped `scadable-policy` class) with

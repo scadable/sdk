@@ -40,7 +40,7 @@ fonts and colors flow straight in and the backlink is credited to **your** page.
 browser fetch is ever blocked (a strict Content-Security-Policy) or the visitor is
 offline, the baked snapshot stays on screen - the page is never blank.
 
-> Why not an iframe? An iframe credits the backlink to api.scadable.com instead of your
+> Why not an iframe? An iframe credits the backlink to policy.scadable.com instead of your
 > page, which kills the SEO value. Use the hybrid snippet.
 
 ## Other ways to embed
@@ -59,11 +59,11 @@ hybrid snippet when SEO matters.
 ### c. Iframe escape hatch (only if scripts are forbidden)
 
 For locked-down hosts that do not allow `<script>` at all **and** do not care about the
-backlink. This forfeits the SEO backlink (it counts toward api.scadable.com), so it is a
+backlink. This forfeits the SEO backlink (it counts toward policy.scadable.com), so it is a
 last resort.
 
 ```html
-<iframe src="https://api.scadable.com/policy/YOUR_TOKEN"
+<iframe src="https://policy.scadable.com/policy/YOUR_TOKEN"
         style="width:100%;border:0;min-height:600px"></iframe>
 ```
 
@@ -73,7 +73,7 @@ last resort.
 | --- | --- | --- | --- |
 | `data-token` / `token` | required | - | Your scope's public token from the SCADABLE app. |
 | `data-doc-type` / `doc-type` | optional | `privacy_policy` | `privacy_policy`, `terms_of_use`, or any future type. |
-| `data-base-url` / `base-url` | optional | `https://api.scadable.com` | Override the API base. Rarely needed. |
+| `data-base-url` / `base-url` | optional | `https://policy.scadable.com` | Override the API base. Rarely needed. |
 
 Use the `data-*` form on a `<div class="scadable-policy">`; use the bare form on the
 `<scadable-policy>` element. Both behave identically.
@@ -105,7 +105,7 @@ If your site sends a `Content-Security-Policy` header, allow the script and the 
 
 ```
 script-src https://cdn.jsdelivr.net;
-connect-src https://api.scadable.com;
+connect-src https://policy.scadable.com;
 ```
 
 (If you self-host the script instead of jsdelivr, point `script-src` at your host.) The

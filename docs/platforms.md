@@ -207,7 +207,7 @@ Anywhere you can paste HTML, paste the universal embed snippet. Nothing else to 
 You are done. When you publish a new version of your document in the SCADABLE app, every
 integration above shows it on the next render, with no redeploy and no edit on your side.
 
-If your site sends a strict Content-Security-Policy, allow `api.scadable.com` in
+If your site sends a strict Content-Security-Policy, allow `policy.scadable.com` in
 `connect-src` so the browser refresh can run. Without it the integration still shows the
 last baked copy, so the page is never blank, it just will not update live until the policy
 allows the fetch.

@@ -58,7 +58,7 @@ Get `YOUR_PUBLIC_TOKEN` from the SCADABLE app after you publish a document.
 | `docType` | `string` | `"privacy_policy"` | Which document to render (`ScadablePolicy` only). |
 | `className` | `string` | none | Class on the wrapper element. |
 | `showVersion` | `boolean` | `false` | Show a "Version N, last updated ..." line. |
-| `baseUrl` | `string` | `https://api.scadable.com` | Override the API base. |
+| `baseUrl` | `string` | `https://policy.scadable.com` | Override the API base. |
 | `initialHtml` | `string` | none | Pre-fetched HTML for SSR hosts. See below. |
 
 ## Always live

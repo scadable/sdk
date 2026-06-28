@@ -16,7 +16,7 @@ function policyFor(docType: string, name: string) {
       class: { type: String, default: undefined },
       /** HTML rendered before the live fetch resolves (e.g. baked in by Nuxt SSR for SEO). */
       initialHtml: { type: String, default: '' },
-      /** Override the API base. Default "https://api.scadable.com". */
+      /** Override the API base. Default "https://policy.scadable.com". */
       baseUrl: { type: String, default: undefined },
     },
     setup(props) {

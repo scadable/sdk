@@ -9,7 +9,7 @@ This is a pure PHP WordPress plugin. It is not an npm package and is not part of
 You publish your policy in the SCADABLE app, which gives you a public token. The plugin fetches the currently published document for that token from the public API and prints it into the page on the server:
 
 ```
-GET https://api.scadable.com/policy/{token}?doc_type={privacy_policy|terms_of_use}&format=json
+GET https://policy.scadable.com/policy/{token}?doc_type={privacy_policy|terms_of_use}&format=json
 ```
 
 The JSON response is `{ html, version, updated_at, doc_type, scope_name, domain, effective_date }`. The `html` field is a self-contained fragment: it carries its own `<style>`, inherits the theme's text color, and already includes the "by scadable.com" backlink. The plugin caches each successful response in a transient for up to one hour, so the API is not called on every page view, and exposes a "Refresh now" button to clear that cache on demand.
@@ -51,7 +51,7 @@ The block works in block-based widget areas. For classic widgets, put the `[scad
 
 ## Privacy
 
-The plugin makes exactly one outbound request: it fetches your published policy from `https://api.scadable.com`, sending only your public token and the document type. No visitor data, personal data, or site data leaves the site. The token is a public identifier for your published documents, not a secret.
+The plugin makes exactly one outbound request: it fetches your published policy from `https://policy.scadable.com`, sending only your public token and the document type. No visitor data, personal data, or site data leaves the site. The token is a public identifier for your published documents, not a secret.
 
 ## File layout
 

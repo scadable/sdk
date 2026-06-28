@@ -41,7 +41,7 @@ const policy = await fetchPolicy('XltJvQpczMk0bDsG', { docType: 'privacy_policy'
 ```
 
 `fetchPolicy(token, options)` builds the request to
-`GET https://api.scadable.com/policy/{token}?doc_type=...&format=json` and returns the
+`GET https://policy.scadable.com/policy/{token}?doc_type=...&format=json` and returns the
 parsed object. Two details make it work across every runtime:
 
 - It is framework-agnostic: it only needs a global `fetch`.
@@ -97,7 +97,7 @@ The hybrid render satisfies both:
 
 If the browser fetch is blocked by a strict Content-Security-Policy or the visitor is
 offline, the baked copy stays in place, so the page is never blank. Allowing
-`api.scadable.com` in `connect-src` restores the live refresh.
+`policy.scadable.com` in `connect-src` restores the live refresh.
 
 Where there is no server (a SPA, or a no-code host), the package renders client-only; the
 universal embed solves the crawlability gap differently, with a pre-baked snapshot in the
@@ -111,7 +111,7 @@ or raw HTML. It must still be live, crawlable, and correctly attributed. Three d
 on the table:
 
 - An iframe pointing at SCADABLE. It is live and trivial to paste, but the document then
-  lives on `api.scadable.com`, not on the customer's domain. The "by scadable.com" backlink
+  lives on `policy.scadable.com`, not on the customer's domain. The "by scadable.com" backlink
   inside it counts as a SCADABLE-to-SCADABLE link, so the viral SEO backlink is
   misattributed and worthless, and crawlers index the iframe content under our domain, not
   the customer's page.

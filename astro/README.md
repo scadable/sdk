@@ -73,7 +73,7 @@ These props apply to `PrivacyPolicy`, `TermsOfUse`, and `ScadablePolicy`.
 | --- | --- | --- | --- |
 | `token` | `string` | required | Your scope's public token. |
 | `class` / `className` | `string` | none | Class on the wrapper element. Either name works. |
-| `baseUrl` | `string` | `https://api.scadable.com` | Override the API base. |
+| `baseUrl` | `string` | `https://policy.scadable.com` | Override the API base. |
 | `docType` | `string` | `"privacy_policy"` | Which document to render. Only on `ScadablePolicy` (the wrappers fix it). |
 
 ## Just the data

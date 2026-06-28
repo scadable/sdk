@@ -23,7 +23,7 @@ Use the hybrid baked `<div>` plus the shared embed script (`snippet.html`, Optio
   data-scadable-token="XltJvQpczMk0bDsG"
   data-scadable-doc-type="privacy_policy">
   <noscript>
-    <a href="https://api.scadable.com/policy/XltJvQpczMk0bDsG?doc_type=privacy_policy&format=html">
+    <a href="https://policy.scadable.com/policy/XltJvQpczMk0bDsG?doc_type=privacy_policy&format=html">
       View our Privacy Policy
     </a>
   </noscript>

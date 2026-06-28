@@ -5,7 +5,7 @@
  * header. Uses the global `fetch` (Node 18+), so there is no HTTP dependency.
  */
 
-export const DEFAULT_API = 'https://api.scadable.com';
+export const DEFAULT_API = 'https://policy.scadable.com';
 
 /** Returned by `GET /wizard/session`. */
 export interface WizardSession {

@@ -100,7 +100,7 @@ export default function Page() {
 All packages are thin wrappers over one public endpoint:
 
 ```
-GET https://api.scadable.com/policy/{token}?doc_type={privacy_policy|terms_of_use}&format=json
+GET https://policy.scadable.com/policy/{token}?doc_type={privacy_policy|terms_of_use}&format=json
 ```
 
 Response (`format=json`):

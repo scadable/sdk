@@ -77,7 +77,7 @@ These props apply to `PrivacyPolicy`, `TermsOfUse`, and `ScadablePolicy`.
 | `className` | `string` | none | Class on the wrapper element. |
 | `showVersion` | `boolean` | `false` | Show a "Version N, last updated ..." line. |
 | `revalidate` | `number \| false` | `3600` | Next.js ISR seconds. `false` = always fresh. |
-| `baseUrl` | `string` | `https://api.scadable.com` | Override the API base. |
+| `baseUrl` | `string` | `https://policy.scadable.com` | Override the API base. |
 | `docType` | `string` | `"privacy_policy"` | Which document to render. Only on `ScadablePolicy` (the wrappers fix it). |
 
 ## Just the data

@@ -46,7 +46,7 @@ Get `YOUR_PUBLIC_TOKEN` from the SCADABLE app after you publish a document.
 | `token` | `string` | required | Your scope's public token. |
 | `class` | `string` | none | Class on the wrapper element. |
 | `initialHtml` | `string` | none | HTML to render before the live fetch resolves (used for SSR, see below). |
-| `baseUrl` | `string` | `https://api.scadable.com` | Override the API base. |
+| `baseUrl` | `string` | `https://policy.scadable.com` | Override the API base. |
 
 `ScadablePolicy` is the same component with one extra prop, `docType`
 (`"privacy_policy"` by default, or `"terms_of_use"`). `PrivacyPolicy` and

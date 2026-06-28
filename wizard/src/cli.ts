@@ -402,7 +402,7 @@ async function main(): Promise<void> {
 
   payoff.push(
     ``,
-    pc.dim('Using a Content-Security-Policy? Add api.scadable.com to connect-src'),
+    pc.dim('Using a Content-Security-Policy? Add policy.scadable.com to connect-src'),
     pc.dim('so the page can refresh live (it falls back to the saved copy if not).'),
   );
 
@@ -517,7 +517,7 @@ async function runPatch(
     pc.dim('It stays current. Update your policy in SCADABLE and every page'),
     pc.dim('updates automatically. No redeploy.'),
     ``,
-    pc.dim('Using a Content-Security-Policy? Add api.scadable.com to connect-src'),
+    pc.dim('Using a Content-Security-Policy? Add policy.scadable.com to connect-src'),
     pc.dim('so the page can refresh live (it falls back to the saved copy if not).'),
   ].join('\n');
   note(payoff, pc.green('Your privacy page is ready'));
