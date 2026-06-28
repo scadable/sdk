@@ -1,6 +1,6 @@
 {
   "name": "@scadable/embed",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Universal SCADABLE embed: drop your always-current privacy policy or terms of use into any website with one snippet.",
   "license": "MIT",
   "type": "module",

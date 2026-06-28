@@ -1,6 +1,6 @@
 import type { FetchPolicyOptions, Policy } from './types';
 
-export const DEFAULT_BASE_URL = 'https://api.scadable.com';
+export const DEFAULT_BASE_URL = 'https://policy.scadable.com';
 
 /**
  * Fetch the currently published document for a public token.

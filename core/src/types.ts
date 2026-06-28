@@ -16,7 +16,7 @@ export interface Policy {
 export interface FetchPolicyOptions {
   /** Which document to fetch. Default "privacy_policy". */
   docType?: string;
-  /** Override the API base. Default "https://api.scadable.com". */
+  /** Override the API base. Default "https://policy.scadable.com". */
   baseUrl?: string;
   /**
    * Next.js ISR revalidation, in seconds (honored by Next, ignored elsewhere).
