@@ -6,7 +6,8 @@ import { defineConfig } from 'tsup';
 // its own with the directive forced back on via `banner`, and (b) build index
 // with PolicyLive marked external, so the server entry imports the client file
 // instead of inlining it (which would poison the server component).
-const external = ['react', 'react-dom', 'react/jsx-runtime', 'next'];
+// @scadable/core is a runtime dependency, so keep it external (imported, not bundled).
+const external = ['react', 'react-dom', 'react/jsx-runtime', 'next', '@scadable/core'];
 
 export default defineConfig([
   {

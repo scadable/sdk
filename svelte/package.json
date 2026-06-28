@@ -1,0 +1,52 @@
+{
+  "name": "@scadable/svelte",
+  "version": "0.1.0",
+  "description": "Render your always-current SCADABLE privacy policy or terms of use in a Svelte or SvelteKit app.",
+  "license": "MIT",
+  "type": "module",
+  "svelte": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "svelte": "./src/index.js",
+      "default": "./src/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "echo \"@scadable/svelte ships .svelte source (no build step)\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "scadable",
+    "privacy",
+    "privacy-policy",
+    "terms-of-use",
+    "compliance",
+    "svelte",
+    "sveltekit"
+  ],
+  "dependencies": {
+    "@scadable/core": "^0.1.0"
+  },
+  "peerDependencies": {
+    "svelte": ">=4"
+  },
+  "devDependencies": {
+    "svelte": "^4.2.19",
+    "typescript": "^5.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scadable/sdk.git",
+    "directory": "svelte"
+  }
+}

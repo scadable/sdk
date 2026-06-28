@@ -2,14 +2,14 @@ export interface Policy {
   /** The name you gave the scope (your company / site). */
   scope_name: string;
   domain: string;
-  /** "privacy_policy" today; more document types later. */
+  /** "privacy_policy", "terms_of_use", or any future document type. */
   doc_type: string;
   /** The published version number that is currently live. */
   version: number;
   effective_date: string;
   /** ISO timestamp of when this version was published, or null. */
   updated_at: string | null;
-  /** The rendered policy as an HTML content fragment (no <html> wrapper). */
+  /** The rendered document as an HTML content fragment (no <html> wrapper). */
   html: string;
 }
 
@@ -19,9 +19,9 @@ export interface FetchPolicyOptions {
   /** Override the API base. Default "https://api.scadable.com". */
   baseUrl?: string;
   /**
-   * Next.js ISR revalidation, in seconds. The policy is server-rendered and
-   * cached for this long, then refreshed, so it stays current without a fetch
-   * on every request. Pass false to always fetch fresh. Default 3600 (1 hour).
+   * Next.js ISR revalidation, in seconds (honored by Next, ignored elsewhere).
+   * Pass false to always fetch fresh (cache: "no-store") - what the browser
+   * refresh uses to stay current. Default 3600 (1 hour) for server/build fetches.
    */
   revalidate?: number | false;
 }

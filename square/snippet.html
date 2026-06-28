@@ -1,0 +1,61 @@
+<!--
+  Scadable on Square Online - paste-in snippet.
+
+  Square Online (Square's website builder, Weebly lineage) has a custom-code "Embed Code"
+  section. Square Online is therefore covered by the UNIVERSAL EMBED; there is no separate
+  Square package. Pick ONE of the two options below, set your token, and paste it into an
+  Embed Code section (see README.md for exact steps).
+
+  Both render your always-current legal document, pulled live from the SCADABLE API. The
+  fragment is self-styled and carries the "by scadable.com" backlink. Change `doc_type` to
+  `terms_of_use` for the terms page. Replace XltJvQpczMk0bDsG with your own token.
+-->
+
+
+<!-- ============================================================================
+     OPTION A (recommended) - Universal embed, one line.
+     The hybrid baked <div> plus the shared @scadable/embed script. The script finds
+     the div, fetches the live document, and replaces the contents. The <noscript> link
+     is the fallback if scripts do not run.
+
+     NOTE: @scadable/embed is published to npm/jsdelivr by the SDK release workflow. Until
+     that first release lands, the script URL below 404s; use Option B in the meantime.
+     ============================================================================ -->
+<div
+  data-scadable-policy
+  data-scadable-token="XltJvQpczMk0bDsG"
+  data-scadable-doc-type="privacy_policy">
+  <noscript>
+    <a href="https://api.scadable.com/policy/XltJvQpczMk0bDsG?doc_type=privacy_policy&amp;format=html">
+      View our Privacy Policy
+    </a>
+  </noscript>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@scadable/embed/dist/embed.js" async></script>
+
+
+<!-- ============================================================================
+     OPTION B - Self-contained, zero dependencies, works TODAY.
+     Same behavior as Option A but with the fetch inlined, so it does not depend on the
+     @scadable/embed package being published. Verified against the live API (CORS is open).
+     ============================================================================ -->
+<div id="scadable-privacy-policy">
+  <noscript>
+    <a href="https://api.scadable.com/policy/XltJvQpczMk0bDsG?doc_type=privacy_policy&amp;format=html">
+      View our Privacy Policy
+    </a>
+  </noscript>
+</div>
+<script>
+  (function () {
+    var TOKEN = 'XltJvQpczMk0bDsG';      // your SCADABLE token
+    var DOC_TYPE = 'privacy_policy';     // or 'terms_of_use'
+    var el = document.getElementById('scadable-privacy-policy');
+    var url = 'https://api.scadable.com/policy/' + encodeURIComponent(TOKEN) +
+              '?doc_type=' + encodeURIComponent(DOC_TYPE) + '&format=fragment';
+    fetch(url)
+      .then(function (r) { if (!r.ok) throw new Error('scadable ' + r.status); return r.text(); })
+      .then(function (html) { el.innerHTML = html; }) // self-styled fragment + backlink
+      .catch(function () { /* leave the <noscript> link as the fallback */ });
+  })();
+</script>

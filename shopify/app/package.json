@@ -1,0 +1,17 @@
+{
+  "name": "scadable-shopify-app",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Scadable Shopify app skeleton: App Proxy that server-renders live legal documents under the store domain. Standalone scaffold - NOT part of the @scadable/sdk npm workspaces. Run npm install inside this folder only.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "@scadable/astro",
+  "version": "0.1.0",
+  "description": "Render your always-current SCADABLE privacy policy or terms of use in an Astro site (SEO-baked + live refresh).",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "./ScadablePolicy.astro": "./src/ScadablePolicy.astro",
+    "./PrivacyPolicy.astro": "./src/PrivacyPolicy.astro",
+    "./TermsOfUse.astro": "./src/TermsOfUse.astro",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "src",
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup --silent || true",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "scadable",
+    "privacy",
+    "privacy-policy",
+    "terms-of-use",
+    "compliance",
+    "astro"
+  ],
+  "dependencies": {
+    "@scadable/core": "^0.1.0"
+  },
+  "peerDependencies": {
+    "astro": ">=4"
+  },
+  "devDependencies": {
+    "astro": "^4.16.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scadable/sdk.git",
+    "directory": "astro"
+  }
+}

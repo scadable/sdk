@@ -36,7 +36,7 @@ jobs:
       - name: Publish workspaces whose version is new
         run: |
           set -e
-          for dir in next wizard; do
+          for dir in core next react astro vue svelte embed wizard; do
             name=$(node -p "require('./$dir/package.json').name")
             ver=$(node -p "require('./$dir/package.json').version")
             if npm view "$name@$ver" version >/dev/null 2>&1; then

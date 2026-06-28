@@ -1,0 +1,35 @@
+# App-level config used by the Shopify CLI and Partner Dashboard.
+#
+# SCAFFOLD: replace `client_id` and the URLs with your app's real values (you get them
+# when you create the app in the Partner Dashboard, or via `shopify app config link`).
+#
+# The two pieces that make the integration work:
+#   - [app_proxy]            : serves the live, server-rendered policy under the STORE
+#                              domain at /apps/scadable/* (best SEO).
+#   - extensions/scadable-policy : the theme app extension (the "Privacy / Terms" block
+#                              the merchant drops onto a page).
+name = "scadable-policy"
+client_id = "REPLACE_WITH_YOUR_CLIENT_ID"
+application_url = "https://your-app-host.example.com"
+embedded = true
+
+[access_scopes]
+# This integration needs NO Admin API scopes. The value is the theme app block plus the
+# app proxy, and neither reads store data. An empty scope list is the least-friction path
+# through App Store review.
+scopes = ""
+
+[app_proxy]
+# Storefront path  /apps/scadable/*  ->  https://your-app-host.example.com/proxy/*
+# e.g. /apps/scadable/policy?doc_type=privacy_policy  ->  /proxy/policy?doc_type=privacy_policy
+prefix = "apps"
+subpath = "scadable"
+url = "https://your-app-host.example.com/proxy"
+
+[auth]
+redirect_urls = [
+  "https://your-app-host.example.com/auth/callback"
+]
+
+[webhooks]
+api_version = "2025-04"

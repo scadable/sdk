@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 
-import { fetchPolicy } from './client';
-import type { FetchPolicyOptions } from './types';
+import { fetchPolicy } from '@scadable/core';
+import type { FetchPolicyOptions } from '@scadable/core';
 
 export interface PolicyLiveProps {
   /** The public token from the SCADABLE app. */
@@ -23,12 +23,13 @@ export interface PolicyLiveProps {
 }
 
 /**
- * The client half of <PrivacyPolicy>. It renders the build-time HTML immediately, so
- * the legal text and the "by scadable.com" backlink are in the static HTML (crawlable
- * for SEO, no layout shift), then re-fetches the live policy in the browser so edits
- * made in SCADABLE show up with no redeploy on the customer's side. If the browser
- * fetch is blocked (a strict Content-Security-Policy) or offline, it keeps the baked
- * copy, so the page is never blank.
+ * The client half shared by <ScadablePolicy>, <PrivacyPolicy>, and <TermsOfUse>. It
+ * renders the build-time HTML immediately, so the legal text and the "by scadable.com"
+ * backlink are in the static HTML (crawlable for SEO, no layout shift), then re-fetches
+ * the live document (for the same `docType`) in the browser so edits made in SCADABLE
+ * show up with no redeploy on the customer's side. If the browser fetch is blocked (a
+ * strict Content-Security-Policy) or offline, it keeps the baked copy, so the page is
+ * never blank.
  */
 export function PolicyLive({
   token,

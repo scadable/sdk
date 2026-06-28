@@ -1,0 +1,18 @@
+---
+import ScadablePolicy from './ScadablePolicy.astro';
+
+export interface Props {
+  /** The public token from the SCADABLE app. */
+  token: string;
+  /** Class on the wrapper element. Both `class` and `className` are accepted. */
+  class?: string;
+  className?: string;
+  /** Override the API base. Default "https://api.scadable.com". */
+  baseUrl?: string;
+}
+
+// Thin wrapper: ScadablePolicy with the doc type fixed. A new document type is a
+// prop value on ScadablePolicy, never a new package.
+---
+
+<ScadablePolicy {...Astro.props} docType="privacy_policy" />

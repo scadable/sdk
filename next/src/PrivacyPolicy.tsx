@@ -1,51 +1,22 @@
-import { fetchPolicy } from './client';
-import { PolicyLive } from './PolicyLive';
-import type { FetchPolicyOptions } from './types';
+import { ScadablePolicy } from './ScadablePolicy';
+import type { ScadablePolicyProps } from './ScadablePolicy';
 
-export interface PrivacyPolicyProps extends FetchPolicyOptions {
-  /** The public token from the SCADABLE app. */
-  token: string;
-  /** Optional wrapper class so you can style/position the policy. */
-  className?: string;
-  /** Show a small "Version N, last updated ..." line under the policy. Default false. */
-  showVersion?: boolean;
-}
+/** Props for <PrivacyPolicy>: the generic props minus `docType` (fixed to "privacy_policy"). */
+export type PrivacyPolicyProps = Omit<ScadablePolicyProps, 'docType'>;
 
 /**
- * Renders your always-current privacy policy.
- *
- * Hybrid by design. The policy HTML is fetched at build / server-render time and baked
- * into the static HTML, so the legal text and the "by scadable.com" backlink are
- * crawlable for SEO and paint instantly. It is then re-fetched in the browser (see
- * {@link PolicyLive}) so edits you make in SCADABLE go live with no redeploy on your
- * side. If a strict Content-Security-Policy blocks the browser fetch, the baked copy
- * stays put, so the page is never blank.
+ * Renders your always-current privacy policy. A thin wrapper over {@link ScadablePolicy}
+ * with `docType` fixed to "privacy_policy"; see that component for the hybrid SEO + live
+ * behavior.
  *
  * ```tsx
- * import { PrivacyPolicy } from '@scadable/privacy';
+ * import { PrivacyPolicy } from '@scadable/next';
  *
- * export default function Page() {
+ * export default function PrivacyPage() {
  *   return <PrivacyPolicy token="YOUR_PUBLIC_TOKEN" />;
  * }
  * ```
  */
-export async function PrivacyPolicy({
-  token,
-  className,
-  showVersion = false,
-  ...options
-}: PrivacyPolicyProps) {
-  const policy = await fetchPolicy(token, options);
-  return (
-    <PolicyLive
-      token={token}
-      initialHtml={policy.html}
-      initialVersion={policy.version}
-      initialUpdatedAt={policy.updated_at}
-      className={className}
-      showVersion={showVersion}
-      baseUrl={options.baseUrl}
-      docType={options.docType}
-    />
-  );
+export function PrivacyPolicy(props: PrivacyPolicyProps) {
+  return ScadablePolicy({ ...props, docType: 'privacy_policy' });
 }

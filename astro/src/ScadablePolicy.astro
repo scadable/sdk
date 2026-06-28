@@ -1,0 +1,68 @@
+---
+import { fetchPolicy } from '@scadable/core';
+import type { Policy } from '@scadable/core';
+
+export interface Props {
+  /** The public token from the SCADABLE app. */
+  token: string;
+  /** Which document to fetch. Default "privacy_policy". */
+  docType?: string;
+  /** Class on the wrapper element. Both `class` and `className` are accepted. */
+  class?: string;
+  className?: string;
+  /** Override the API base. Default "https://api.scadable.com". */
+  baseUrl?: string;
+}
+
+const { token, docType = 'privacy_policy', class: classProp, className, baseUrl } = Astro.props;
+
+// Hybrid by design. Bake the currently published document into the static HTML at
+// build / SSR time, so the policy text and the "by scadable.com" backlink are in
+// the markup a crawler sees (good for SEO) and paint instantly with no layout
+// shift. revalidate:false keeps this build fetch un-cached; staying current
+// afterwards is the browser refresh script's job (below), so editing the policy in
+// SCADABLE never means a redeploy on the customer's side.
+const policy: Policy = await fetchPolicy(token, {
+  docType,
+  revalidate: false,
+  ...(baseUrl ? { baseUrl } : {}),
+});
+
+const wrapperClass = ['scadable-policy', classProp, className].filter(Boolean).join(' ');
+---
+
+<div
+  class={wrapperClass}
+  data-scadable-policy
+  data-scadable-token={token}
+  data-scadable-doc-type={docType}
+  data-scadable-base-url={baseUrl}
+  set:html={policy.html}
+/>
+
+<script>
+  // Live refresh, runs in the browser: re-fetch each baked policy and swap it for
+  // whatever version is currently published, so edits made in SCADABLE show up
+  // without a rebuild. This is a plain fetch on purpose. It runs in the browser
+  // and so cannot import the node-side @scadable/core. The token, doc type, and
+  // base URL come from the wrapper's data attributes. If the fetch is blocked (a
+  // strict Content-Security-Policy) or the visitor is offline, the baked copy is
+  // kept, so the page is never blank. One hoisted script handles every instance
+  // on the page.
+  const DEFAULT_BASE_URL = 'https://api.scadable.com';
+  for (const el of document.querySelectorAll('[data-scadable-policy]')) {
+    const token = el.getAttribute('data-scadable-token');
+    if (!token) continue;
+    const docType = el.getAttribute('data-scadable-doc-type') || 'privacy_policy';
+    const baseUrl = (el.getAttribute('data-scadable-base-url') || DEFAULT_BASE_URL).replace(/\/+$/, '');
+    const url = `${baseUrl}/policy/${encodeURIComponent(token)}?doc_type=${encodeURIComponent(docType)}&format=json`;
+    fetch(url, { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((policy) => {
+        if (policy && typeof policy.html === 'string') el.innerHTML = policy.html;
+      })
+      .catch(() => {
+        /* keep the baked copy if the browser fetch is blocked or offline */
+      });
+  }
+</script>

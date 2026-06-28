@@ -24,10 +24,10 @@ const INSTALL_VERB: Record<PackageManager, string> = {
 };
 
 /**
- * Resolve the package specifiers to install. The server lists them in
- * `plan.install`; we tolerate either bare specs (["@scadable/privacy"]) or full
- * command strings ("npm install @scadable/privacy"), always include the core
- * package, and de-duplicate.
+ * Resolve the package specifiers to install from a server plan's `install` list
+ * (the patch path). We tolerate either bare specs (["@scadable/next"]) or full
+ * command strings ("npm install @scadable/next"), and de-duplicate. The create
+ * path does not use this: it installs the one package the scaffold registry names.
  */
 export function resolvePackages(install: string[]): string[] {
   const noise = /^(?:npm|yarn|pnpm|install|add|i|--save|-S|-D|--save-dev|--dev)$/;
@@ -35,7 +35,7 @@ export function resolvePackages(install: string[]): string[] {
     .flatMap((line) => line.split(/\s+/))
     .map((token) => token.trim())
     .filter((token) => token && !noise.test(token));
-  return [...new Set(['@scadable/privacy', ...specs])];
+  return [...new Set(specs)];
 }
 
 /** The command we will run, formatted for display. */

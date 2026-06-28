@@ -1,0 +1,60 @@
+{
+  "name": "@scadable/embed",
+  "version": "0.1.0",
+  "description": "Universal SCADABLE embed: drop your always-current privacy policy or terms of use into any website with one snippet.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./embed.js": "./dist/embed.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "unpkg": "./dist/embed.js",
+  "jsdelivr": "./dist/embed.js",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "scadable",
+    "privacy",
+    "privacy-policy",
+    "terms-of-use",
+    "compliance",
+    "embed",
+    "web-component",
+    "wordpress",
+    "squarespace",
+    "wix",
+    "webflow",
+    "shopify",
+    "square"
+  ],
+  "dependencies": {
+    "@scadable/core": "^0.1.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scadable/sdk.git",
+    "directory": "embed"
+  }
+}

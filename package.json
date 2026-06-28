@@ -4,7 +4,13 @@
   "description": "SCADABLE client libraries. Public. Each framework lives in its own folder.",
   "license": "MIT",
   "workspaces": [
+    "core",
     "next",
+    "react",
+    "astro",
+    "vue",
+    "svelte",
+    "embed",
     "wizard"
   ],
   "scripts": {

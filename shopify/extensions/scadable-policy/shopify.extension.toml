@@ -1,0 +1,14 @@
+# Theme app extension config.
+#
+# This registers the "Privacy / Terms" app block. After the merchant installs the app,
+# they open the theme editor (Online Store > Themes > Customize), open the page where the
+# policy should live, and choose Add block > Apps > Scadable Policy. No theme code edits.
+#
+# `handle` is the stable identifier Shopify uses for the extension; keep it in sync with
+# the folder name (extensions/scadable-policy).
+api_version = "2025-04"
+
+[[extensions]]
+type = "theme"
+name = "Scadable Policy"
+handle = "scadable-policy"

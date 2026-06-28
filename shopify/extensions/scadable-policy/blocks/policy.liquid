@@ -1,0 +1,100 @@
+{% comment %}
+  Scadable Privacy Policy / Terms of Use app block.
+
+  Renders your always-current legal document, pulled LIVE from the SCADABLE API. Drop this
+  block onto any page from the theme editor. Publish a new version of the policy in the
+  SCADABLE app and it changes here with no theme edit and no redeploy.
+
+  Two rendering paths (see this extension's README and ../../README.md):
+
+    1. App Proxy (recommended, SEO-clean): leave "SCADABLE token" BLANK. The browser
+       requests the first-party URL {proxy}/policy, which the app server renders from the
+       SCADABLE API server-side. The token never touches the storefront, and you can also
+       link the proxy URL directly as a standalone, fully server-rendered policy page.
+
+    2. Direct (no app server needed): enter your public SCADABLE token. The block fetches
+       the public SCADABLE API straight from the browser. CORS is open, so this works with
+       zero backend - good for a quick start before the app proxy is wired up.
+
+  Either way the merchant configures ONE thing (the token, or nothing if the app proxy
+  already knows it) and is done.
+{% endcomment %}
+
+{%- assign doc_type = block.settings.doc_type | default: 'privacy_policy' -%}
+{%- assign proxy = block.settings.proxy_subpath | default: '/apps/scadable' -%}
+{%- assign token = block.settings.token | strip -%}
+
+{%- comment -%} No-JS / crawler fallback target. {%- endcomment -%}
+{%- if token != blank -%}
+  {%- assign fallback_href = 'https://api.scadable.com/policy/' | append: token | append: '?doc_type=' | append: doc_type | append: '&format=html' -%}
+{%- else -%}
+  {%- assign fallback_href = proxy | append: '/policy?doc_type=' | append: doc_type -%}
+{%- endif -%}
+
+<div class="scadable-policy-block" {{ block.shopify_attributes }}>
+  {%- if block.settings.heading != blank -%}
+    <h2 class="scadable-policy-block__heading">{{ block.settings.heading | escape }}</h2>
+  {%- endif -%}
+
+  <div
+    class="scadable-policy"
+    data-scadable-policy
+    data-scadable-token="{{ token | escape }}"
+    data-scadable-doc-type="{{ doc_type | escape }}"
+    data-scadable-proxy="{{ proxy | escape }}">
+    {%- comment -%}
+      Hybrid baked container: this <noscript> link is what crawlers and no-JS visitors see.
+      The script below replaces it with the live document fragment when JS runs.
+    {%- endcomment -%}
+    <noscript>
+      <a href="{{ fallback_href }}" rel="nofollow">{{ 'scadable.view_document' | t }}</a>
+    </noscript>
+  </div>
+</div>
+
+{{ 'scadable-policy.js' | asset_url | script_tag }}
+
+{% schema %}
+{
+  "name": "Privacy / Terms",
+  "target": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Renders your always-current legal document from SCADABLE. Update it in the SCADABLE app and it changes here automatically."
+    },
+    {
+      "type": "select",
+      "id": "doc_type",
+      "label": "Document",
+      "default": "privacy_policy",
+      "options": [
+        { "value": "privacy_policy", "label": "Privacy Policy" },
+        { "value": "terms_of_use", "label": "Terms of Use" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "token",
+      "label": "SCADABLE token",
+      "info": "Leave blank to use the Scadable app proxy (recommended, best for SEO). Enter your public token to fetch directly from the SCADABLE API with no app server."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (optional)"
+    },
+    {
+      "type": "header",
+      "content": "Advanced"
+    },
+    {
+      "type": "text",
+      "id": "proxy_subpath",
+      "label": "App proxy subpath",
+      "default": "/apps/scadable",
+      "info": "Only change this if you configured a different App Proxy subpath in shopify.app.toml."
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "scadable/policy",
+	"version": "0.1.0",
+	"title": "SCADABLE Policy",
+	"category": "widgets",
+	"icon": "shield",
+	"description": "Display your always-current privacy policy or terms of use, pulled live from SCADABLE.",
+	"keywords": [ "privacy", "policy", "terms", "legal", "scadable" ],
+	"textdomain": "scadable-policy",
+	"supports": {
+		"html": false,
+		"multiple": true
+	},
+	"attributes": {
+		"token": {
+			"type": "string",
+			"default": ""
+		},
+		"docType": {
+			"type": "string",
+			"default": "privacy_policy"
+		}
+	},
+	"editorScript": "scadable-policy-editor"
+}

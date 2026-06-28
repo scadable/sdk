@@ -1,7 +1,7 @@
 {
   "name": "@scadable/wizard",
-  "version": "0.1.2",
-  "description": "The SCADABLE setup wizard. Wires SCADABLE into your codebase (privacy policy now, more to come).",
+  "version": "0.2.0",
+  "description": "The SCADABLE setup wizard. Detects your framework and wires your always-current legal documents (privacy policy, terms of use) into any app, live from SCADABLE.",
   "license": "MIT",
   "type": "module",
   "bin": {
