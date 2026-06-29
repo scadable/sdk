@@ -22,7 +22,7 @@ import { verifyAppProxySignature } from './lib/verifyProxySignature.js';
 const app = express();
 
 const SHOPIFY_API_SECRET = process.env.SHOPIFY_API_SECRET || '';
-const SCADABLE_API = (process.env.SCADABLE_API || 'https://api.scadable.com').replace(/\/+$/, '');
+const SCADABLE_API = (process.env.SCADABLE_API || 'https://policy.scadable.com').replace(/\/+$/, '');
 const ALLOWED_DOC_TYPES = ['privacy_policy', 'terms_of_use'];
 
 /**

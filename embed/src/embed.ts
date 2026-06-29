@@ -92,10 +92,14 @@ export async function mount(el: Element, opts?: MountOptions): Promise<Policy | 
       node.dataset.scadableState = 'live';
     }
     return policy;
-  } catch {
+  } catch (err) {
     // Keep the baked snapshot. This is the whole point of the hybrid snippet:
     // the crawlable copy stays on the page even when the live fetch cannot run.
+    // Mark the node and warn so a failed live fetch (bad token, CSP, offline) is
+    // debuggable instead of silently leaving a stale copy.
     node.dataset.scadableState = 'baked';
+    node.dataset.scadableError = 'true';
+    console.warn(`[@scadable/embed] failed to load policy for token "${config.token}"`, err);
     return null;
   }
 }

@@ -126,6 +126,10 @@ Response (`format=json`):
 - `html` is a self-contained fragment (no `<html>` wrapper). It inherits the host page's
   text color and includes the "by scadable.com" backlink.
 
+**Trust boundary:** the `html` is your own first-party document served by SCADABLE over
+HTTPS, so every renderer injects it directly (`dangerouslySetInnerHTML` / `innerHTML` /
+`{@html}`) with no client-side sanitization, which is safe for trusted first-party HTML.
+
 The shared fetch client and types live in [`@scadable/core`](./core); every other JS
 package builds on it.
 

@@ -56,6 +56,7 @@ export function ScadablePolicy({
   const [html, setHtml] = React.useState<string | undefined>(initialHtml);
   const [version, setVersion] = React.useState<number | undefined>(undefined);
   const [updatedAt, setUpdatedAt] = React.useState<string | null>(null);
+  const [errored, setErrored] = React.useState(false);
 
   React.useEffect(() => {
     let alive = true;
@@ -67,10 +68,14 @@ export function ScadablePolicy({
         setHtml(p.html);
         setVersion(p.version);
         setUpdatedAt(p.updated_at);
+        setErrored(false);
       })
-      .catch(() => {
-        /* keep whatever is shown (initialHtml or the loading line) if the browser
-           fetch is blocked (CSP) or offline */
+      .catch((err: unknown) => {
+        // Keep whatever is shown (initialHtml or the loading line) if the browser
+        // fetch is blocked (CSP), offline, or the token/API is bad, but make the
+        // failure visible: warn and mark the node so it is debuggable.
+        if (alive) setErrored(true);
+        console.warn(`[@scadable/react] failed to load policy for token "${token}"`, err);
       });
     return () => {
       alive = false;
@@ -78,7 +83,7 @@ export function ScadablePolicy({
   }, [token, docType, baseUrl]);
 
   return (
-    <div className={className}>
+    <div className={className} data-scadable-error={errored ? 'true' : undefined}>
       {html !== undefined ? (
         <div dangerouslySetInnerHTML={{ __html: html }} />
       ) : (

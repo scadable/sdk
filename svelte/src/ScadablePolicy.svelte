@@ -26,16 +26,20 @@
   export { className as class };
 
   let html = initialHtml;
+  let errored = false;
 
   onMount(() => {
     fetchPolicy(token, { docType, revalidate: false })
       .then((policy) => {
         if (policy && policy.html) html = policy.html;
       })
-      .catch(() => {
-        /* keep the baked copy if the browser fetch is blocked (CSP) or offline */
+      .catch((err) => {
+        // Keep the baked copy if the browser fetch is blocked (CSP), offline, or the
+        // token/API is bad, but make the failure visible for debugging.
+        errored = true;
+        console.warn(`[@scadable/svelte] failed to load policy for token "${token}"`, err);
       });
   });
 </script>
 
-<div class={className}>{@html html}</div>
+<div class={className} data-scadable-error={errored ? 'true' : undefined}>{@html html}</div>

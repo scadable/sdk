@@ -36,6 +36,7 @@ export const ScadablePolicy = defineComponent({
   },
   setup(props) {
     const html = ref(props.initialHtml);
+    const errored = ref(false);
 
     onMounted(() => {
       const opts: FetchPolicyOptions = { docType: props.docType, revalidate: false };
@@ -44,12 +45,20 @@ export const ScadablePolicy = defineComponent({
         .then((policy) => {
           if (policy?.html) html.value = policy.html;
         })
-        .catch(() => {
-          /* keep the baked copy if the browser fetch is blocked (CSP) or offline */
+        .catch((err) => {
+          // Keep the baked copy if the browser fetch is blocked (CSP), offline, or
+          // the token/API is bad, but make the failure visible for debugging.
+          errored.value = true;
+          console.warn(`[@scadable/vue] failed to load policy for token "${props.token}"`, err);
         });
     });
 
-    return () => h('div', { class: props.class, innerHTML: html.value });
+    return () =>
+      h('div', {
+        class: props.class,
+        innerHTML: html.value,
+        ...(errored.value ? { 'data-scadable-error': 'true' } : {}),
+      });
   },
 });
 

@@ -41,7 +41,39 @@ export async function ScadablePolicy({
   docType = 'privacy_policy',
   ...options
 }: ScadablePolicyProps) {
-  const policy = await fetchPolicy(token, { ...options, docType });
+  let policy;
+  try {
+    policy = await fetchPolicy(token, { ...options, docType });
+  } catch (err) {
+    // A bad token or a down API must never hard-fail the customer's build / SSR.
+    console.warn(`[@scadable/next] failed to load policy for token "${token}"`, err);
+
+    if (process.env.NODE_ENV !== 'production') {
+      // In development, surface the real cause inline so it is obvious what broke.
+      return (
+        <div className={className}>
+          <p style={{ fontSize: 13, color: '#b91c1c' }}>
+            [@scadable/next] Could not load the {docType} for token &quot;{token}&quot;:{' '}
+            {err instanceof Error ? err.message : String(err)}
+          </p>
+        </div>
+      );
+    }
+
+    // In production, render nothing baked and let the browser live-refresh fill it in,
+    // so the page still builds and recovers on its own once the API is reachable again.
+    return (
+      <PolicyLive
+        token={token}
+        initialHtml=""
+        className={className}
+        showVersion={showVersion}
+        baseUrl={options.baseUrl}
+        docType={docType}
+      />
+    );
+  }
+
   return (
     <PolicyLive
       token={token}

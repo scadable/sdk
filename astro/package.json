@@ -31,7 +31,7 @@
     "astro"
   ],
   "dependencies": {
-    "@scadable/core": "^0.1.0"
+    "@scadable/core": "^0.1.2"
   },
   "peerDependencies": {
     "astro": ">=4"

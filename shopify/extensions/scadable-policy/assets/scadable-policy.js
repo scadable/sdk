@@ -15,7 +15,7 @@
  * fallback link is left in place, so the page is never blank.
  */
 (function () {
-  var API_BASE = 'https://api.scadable.com';
+  var API_BASE = 'https://policy.scadable.com';
 
   function buildUrl(el) {
     var token = (el.getAttribute('data-scadable-token') || '').trim();

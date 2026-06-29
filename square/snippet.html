@@ -26,7 +26,7 @@
   data-scadable-token="XltJvQpczMk0bDsG"
   data-scadable-doc-type="privacy_policy">
   <noscript>
-    <a href="https://api.scadable.com/policy/XltJvQpczMk0bDsG?doc_type=privacy_policy&amp;format=html">
+    <a href="https://policy.scadable.com/policy/XltJvQpczMk0bDsG?doc_type=privacy_policy&amp;format=html">
       View our Privacy Policy
     </a>
   </noscript>
@@ -41,7 +41,7 @@
      ============================================================================ -->
 <div id="scadable-privacy-policy">
   <noscript>
-    <a href="https://api.scadable.com/policy/XltJvQpczMk0bDsG?doc_type=privacy_policy&amp;format=html">
+    <a href="https://policy.scadable.com/policy/XltJvQpczMk0bDsG?doc_type=privacy_policy&amp;format=html">
       View our Privacy Policy
     </a>
   </noscript>
@@ -51,7 +51,7 @@
     var TOKEN = 'XltJvQpczMk0bDsG';      // your SCADABLE token
     var DOC_TYPE = 'privacy_policy';     // or 'terms_of_use'
     var el = document.getElementById('scadable-privacy-policy');
-    var url = 'https://api.scadable.com/policy/' + encodeURIComponent(TOKEN) +
+    var url = 'https://policy.scadable.com/policy/' + encodeURIComponent(TOKEN) +
               '?doc_type=' + encodeURIComponent(DOC_TYPE) + '&format=fragment';
     fetch(url)
       .then(function (r) { if (!r.ok) throw new Error('scadable ' + r.status); return r.text(); })

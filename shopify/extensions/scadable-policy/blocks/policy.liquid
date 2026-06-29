@@ -26,7 +26,7 @@
 
 {%- comment -%} No-JS / crawler fallback target. {%- endcomment -%}
 {%- if token != blank -%}
-  {%- assign fallback_href = 'https://api.scadable.com/policy/' | append: token | append: '?doc_type=' | append: doc_type | append: '&format=html' -%}
+  {%- assign fallback_href = 'https://policy.scadable.com/policy/' | append: token | append: '?doc_type=' | append: doc_type | append: '&format=html' -%}
 {%- else -%}
   {%- assign fallback_href = proxy | append: '/policy?doc_type=' | append: doc_type -%}
 {%- endif -%}

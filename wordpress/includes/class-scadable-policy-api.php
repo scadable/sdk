@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Scadable_Policy_API {
 
-	/** Base URL of the public SCADABLE API. */
-	const API_BASE = 'https://api.scadable.com';
+	/** Base URL of the public SCADABLE policy serve. */
+	const API_BASE = 'https://policy.scadable.com';
 
 	/** How long to cache a fetched document, in seconds (one hour). */
 	const CACHE_TTL = 3600;

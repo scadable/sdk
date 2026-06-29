@@ -29,7 +29,7 @@ The plugin renders server-side, so the full policy text is in the page's HTML. T
 
 = Privacy =
 
-The plugin makes one outbound request: it fetches your published policy document from `https://api.scadable.com`. It sends only your public token and the document type. No visitor data, personal data, or site data is sent. The token is a public identifier for your published documents, not a secret credential.
+The plugin makes one outbound request: it fetches your published policy document from `https://policy.scadable.com`. It sends only your public token and the document type. No visitor data, personal data, or site data is sent. The token is a public identifier for your published documents, not a secret credential.
 
 == Installation ==
 

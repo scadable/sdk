@@ -1,6 +1,6 @@
 {
   "name": "@scadable/embed",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Universal SCADABLE embed: drop your always-current privacy policy or terms of use into any website with one snippet.",
   "license": "MIT",
   "type": "module",
@@ -43,7 +43,7 @@
     "square"
   ],
   "dependencies": {
-    "@scadable/core": "^0.1.0"
+    "@scadable/core": "^0.1.2"
   },
   "devDependencies": {
     "tsup": "^8.3.0",
