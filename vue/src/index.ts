@@ -38,6 +38,12 @@ export const PrivacyPolicy = policyFor('privacy_policy', 'PrivacyPolicy');
 /** Renders your always-current terms of use. Token-only: `<TermsOfUse token="..." />`. */
 export const TermsOfUse = policyFor('terms_of_use', 'TermsOfUse');
 
+/** Renders your always-current cookie policy. Token-only: `<CookiePolicy token="..." />`. */
+export const CookiePolicy = policyFor('cookie_policy', 'CookiePolicy');
+
+/** Renders your always-current imprint. Token-only: `<Imprint token="..." />`. */
+export const Imprint = policyFor('imprint', 'Imprint');
+
 export { ScadablePolicy };
 export { fetchPolicy, DEFAULT_BASE_URL } from '@scadable/core';
 export type { Policy, FetchPolicyOptions } from '@scadable/core';

@@ -9,6 +9,10 @@ export { PrivacyPolicy } from './PrivacyPolicy';
 export type { PrivacyPolicyProps } from './PrivacyPolicy';
 export { TermsOfUse } from './TermsOfUse';
 export type { TermsOfUseProps } from './TermsOfUse';
+export { CookiePolicy } from './CookiePolicy';
+export type { CookiePolicyProps } from './CookiePolicy';
+export { Imprint } from './Imprint';
+export type { ImprintProps } from './Imprint';
 
 // The shared 'use client' island (also exported for advanced/manual composition).
 export { PolicyLive } from './PolicyLive';

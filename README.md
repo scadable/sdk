@@ -91,7 +91,7 @@ export default function Page() {
 }
 ```
 
-- `<PrivacyPolicy token="..." />` and `<TermsOfUse token="..." />` are token-only.
+- `<PrivacyPolicy token="..." />`, `<TermsOfUse token="..." />`, `<CookiePolicy token="..." />`, and `<Imprint token="..." />` are token-only.
 - `<ScadablePolicy token="..." docType="..." />` renders any document type, including
   future ones.
 
@@ -117,7 +117,7 @@ Response (`format=json`):
 }
 ```
 
-- `doc_type`: `privacy_policy` or `terms_of_use` today. The SDK is document-type-generic,
+- `doc_type`: `privacy_policy`, `terms_of_use`, `cookie_policy`, or `imprint` today. The SDK is document-type-generic,
   so new types work the moment the API serves them.
 - `format`: `json` (the default the SDK uses), or `html` / `fragment` to get the raw HTML
   fragment for direct embedding.

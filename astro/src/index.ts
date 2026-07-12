@@ -1,6 +1,8 @@
 // The Astro components ship as raw .astro files. Import them directly, e.g.
 //   import PrivacyPolicy from '@scadable/astro/PrivacyPolicy.astro';
 //   import TermsOfUse from '@scadable/astro/TermsOfUse.astro';
+//   import CookiePolicy from '@scadable/astro/CookiePolicy.astro';
+//   import Imprint from '@scadable/astro/Imprint.astro';
 //   import ScadablePolicy from '@scadable/astro/ScadablePolicy.astro';
 //
 // This entry exists for the "render it yourself" case: it re-exports the

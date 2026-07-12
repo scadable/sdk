@@ -141,7 +141,13 @@ function previewContents(contents: string, maxLines = 12): string {
 
 /** Human label for a document type. */
 function docLabel(docType: DocType): string {
-  return docType === 'privacy_policy' ? 'Privacy Policy' : 'Terms of Use';
+  const labels: Record<DocType, string> = {
+    privacy_policy: 'Privacy Policy',
+    terms_of_use: 'Terms of Use',
+    cookie_policy: 'Cookie Policy',
+    imprint: 'Imprint',
+  };
+  return labels[docType];
 }
 
 /** The public URL the document renders at on the SCADABLE API. */
@@ -161,9 +167,15 @@ function docTypesFromFlag(value: string | undefined): DocType[] | undefined {
     case 'terms':
     case 'terms_of_use':
       return ['terms_of_use'];
+    case 'cookies':
+    case 'cookie_policy':
+      return ['cookie_policy'];
+    case 'imprint':
+      return ['imprint'];
     case 'both':
-    case 'all':
       return ['privacy_policy', 'terms_of_use'];
+    case 'all':
+      return ['privacy_policy', 'terms_of_use', 'cookie_policy', 'imprint'];
     default:
       return undefined;
   }
@@ -174,7 +186,7 @@ async function chooseDocTypes(args: CliArgs): Promise<DocType[]> {
   const fromFlag = docTypesFromFlag(args.docType);
   if (fromFlag) return fromFlag;
   if (args.docType) {
-    log.warn(`Unknown --doc-type "${args.docType}". Expected privacy, terms, or both.`);
+    log.warn(`Unknown --doc-type "${args.docType}". Expected privacy, terms, cookies, imprint, both, or all.`);
   }
   // Non-interactive: default to the privacy policy, the most common single page.
   if (args.yes || args.dryRun) return ['privacy_policy'];
@@ -184,7 +196,9 @@ async function chooseDocTypes(args: CliArgs): Promise<DocType[]> {
     options: [
       { value: 'privacy', label: 'Privacy Policy', hint: '/privacy' },
       { value: 'terms', label: 'Terms of Use', hint: '/terms' },
-      { value: 'both', label: 'Both', hint: '/privacy and /terms' },
+      { value: 'cookies', label: 'Cookie Policy', hint: '/cookies' },
+      { value: 'imprint', label: 'Imprint', hint: '/imprint' },
+      { value: 'all', label: 'All four', hint: '/privacy, /terms, /cookies, /imprint' },
     ],
     initialValue: 'privacy',
   });

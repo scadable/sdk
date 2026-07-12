@@ -24,5 +24,11 @@ export class PrivacyPolicy extends SvelteComponent<DocumentProps> {}
 /** Renders your always-current terms of use. Token-only: `<TermsOfUse token="..." />`. */
 export class TermsOfUse extends SvelteComponent<DocumentProps> {}
 
+/** Renders your always-current cookie policy. Token-only: `<CookiePolicy token="..." />`. */
+export class CookiePolicy extends SvelteComponent<DocumentProps> {}
+
+/** Renders your always-current imprint. Token-only: `<Imprint token="..." />`. */
+export class Imprint extends SvelteComponent<DocumentProps> {}
+
 export { fetchPolicy, DEFAULT_BASE_URL } from '@scadable/core';
 export type { Policy, FetchPolicyOptions } from '@scadable/core';

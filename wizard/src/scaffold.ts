@@ -14,7 +14,7 @@
 import type { Framework } from './detect';
 
 /** The document types the wizard can scaffold. Matches the SCADABLE API `doc_type`. */
-export type DocType = 'privacy_policy' | 'terms_of_use';
+export type DocType = 'privacy_policy' | 'terms_of_use' | 'cookie_policy' | 'imprint';
 
 /** A single file the wizard will create. */
 export interface ScaffoldFile {
@@ -55,6 +55,8 @@ interface DocMeta {
 const DOC: Record<DocType, DocMeta> = {
   privacy_policy: { title: 'Privacy Policy', slug: 'privacy', component: 'PrivacyPolicy' },
   terms_of_use: { title: 'Terms of Use', slug: 'terms', component: 'TermsOfUse' },
+  cookie_policy: { title: 'Cookie Policy', slug: 'cookies', component: 'CookiePolicy' },
+  imprint: { title: 'Imprint', slug: 'imprint', component: 'Imprint' },
 };
 
 /** The npm package each framework installs. `html` uses the CDN embed (null). */

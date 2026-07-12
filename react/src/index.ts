@@ -4,4 +4,8 @@ export { PrivacyPolicy } from './PrivacyPolicy';
 export type { PrivacyPolicyProps } from './PrivacyPolicy';
 export { TermsOfUse } from './TermsOfUse';
 export type { TermsOfUseProps } from './TermsOfUse';
+export { CookiePolicy } from './CookiePolicy';
+export type { CookiePolicyProps } from './CookiePolicy';
+export { Imprint } from './Imprint';
+export type { ImprintProps } from './Imprint';
 export type { Policy, FetchPolicyOptions } from '@scadable/core';

@@ -45,7 +45,9 @@
 						value: attributes.docType,
 						options: [
 							{ label: __( 'Privacy policy', 'scadable-policy' ), value: 'privacy_policy' },
-							{ label: __( 'Terms of use', 'scadable-policy' ), value: 'terms_of_use' }
+							{ label: __( 'Terms of use', 'scadable-policy' ), value: 'terms_of_use' },
+							{ label: __( 'Cookie policy', 'scadable-policy' ), value: 'cookie_policy' },
+							{ label: __( 'Imprint', 'scadable-policy' ), value: 'imprint' }
 						],
 						onChange: function ( value ) {
 							setAttributes( { docType: value } );
