@@ -1,6 +1,6 @@
 {
   "name": "@scadable/astro",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Render your always-current SCADABLE privacy policy or terms of use in an Astro site (SEO-baked + live refresh).",
   "license": "MIT",
   "type": "module",

@@ -1,6 +1,6 @@
 {
   "name": "@scadable/next",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Render your always-current SCADABLE privacy policy or terms of use in a Next.js app (hybrid SSR bake + live refresh).",
   "license": "MIT",
   "type": "module",

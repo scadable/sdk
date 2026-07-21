@@ -1,6 +1,6 @@
 {
   "name": "@scadable/svelte",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Render your always-current SCADABLE privacy policy or terms of use in a Svelte or SvelteKit app.",
   "license": "MIT",
   "type": "module",
