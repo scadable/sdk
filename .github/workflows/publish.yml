@@ -3,11 +3,12 @@ name: Publish packages
 # Publishes any workspace whose package.json version is not yet on npm. Runs when a
 # GitHub Release is published (or manually from the Actions tab).
 #
-# Auth is npm Trusted Publishing (OIDC): NO token, NO 2FA prompt - npm verifies this
-# workflow's GitHub identity directly. Each package must be registered once as a
-# Trusted Publisher on npmjs.com (Package settings -> Publishing access -> GitHub
-# Actions: org "scadable", repo "sdk", workflow "publish.yml"). After that, cutting a
-# release publishes whatever version is new.
+# Auth is the repo's NPM_TOKEN secret (granular automation token), fed to npm via
+# setup-node's registry-url + NODE_AUTH_TOKEN. The OIDC Trusted Publishing path was
+# tried 2026-07-21 and failed ENEEDAUTH because the packages were never registered as
+# Trusted Publishers on npmjs.com (Package settings -> Publishing access -> GitHub
+# Actions: org "scadable", repo "sdk", workflow "publish.yml"); register them and the
+# token can be dropped. id-token: write stays for --provenance attestation either way.
 on:
   release:
     types: [published]
@@ -25,8 +26,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          # Writes an .npmrc that reads NODE_AUTH_TOKEN, so the publish step below
+          # authenticates with the NPM_TOKEN secret.
+          registry-url: 'https://registry.npmjs.org'
 
-      # Trusted publishing needs a recent npm; pin to a version that supports OIDC.
+      # Provenance + granular tokens need a recent npm.
       - run: npm install -g npm@latest
 
       - run: npm ci
@@ -34,6 +38,8 @@ jobs:
       - run: npm run build
 
       - name: Publish workspaces whose version is new
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           set -e
           for dir in core next react astro vue svelte embed wizard; do
