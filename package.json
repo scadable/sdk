@@ -20,5 +20,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/scadable/sdk.git"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "^8.5.23"
+    }
   }
 }
