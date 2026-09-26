@@ -51,6 +51,10 @@ const ACCEPTED = [
 ];
 
 const REFUSED = [
+  // CodeQL js/bad-tag-filter's own example. The patterns are an allowlist read
+  // left to right, so a tag they do not match refuses the whole document.
+  ['a script with a newline before its end', '<script \n></script>'],
+  ['a script with a newline in its end tag', '<p>x</p><script>alert(1)</script\n>'],
   // Canonical HTML has exactly one space before each attribute and none before `>`;
   // anything else is refused, which is also what keeps the parser linear.
   ['whitespace before a tag ends', '<p >x</p>'],
