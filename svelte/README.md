@@ -39,17 +39,38 @@ Terms of use is the same, with `TermsOfUse`:
 
 Get `YOUR_PUBLIC_TOKEN` from the SCADABLE app after you publish a document.
 
+## A published document (tenant)
+
+A document you approve in the SCADABLE app is also published at
+`https://files.scadable.com/{tenant}/{document}.html`. Give the tenant in place of the
+token; the named components know their document's slug.
+
+```svelte
+<script>
+  import { PrivacyPolicy, ScadablePolicy } from '@scadable/svelte';
+</script>
+
+<PrivacyPolicy tenant="YOUR_TENANT" />
+<ScadablePolicy tenant="YOUR_TENANT" document="terms-of-use" />
+```
+
+The document is checked before it is rendered (`isAllowedHtml` in `@scadable/core`). One
+that is not made only of what a SCADABLE document may contain is not rendered, and a plain
+link to it is shown instead.
+
 ## Props
 
 | Prop | Type | Default | Notes |
 | --- | --- | --- | --- |
-| `token` | `string` | required | Your scope's public token. |
+| `token` | `string` | required without a tenant | Your scope's public token. |
+| `tenant` | `string` | none | Your organization's id in SCADABLE, in place of a token. |
 | `class` | `string` | none | Class on the wrapper element. |
-| `initialHtml` | `string` | none | HTML to render before the live fetch resolves (used for SSR, see below). |
+| `initialHtml` | `string` | none | HTML to render before the live fetch resolves (used for SSR, see below). With a tenant it is checked like the live copy. |
 
 `ScadablePolicy` is the same component with one extra prop, `docType`
-(`"privacy_policy"` by default, or `"terms_of_use"`). `PrivacyPolicy` and
-`TermsOfUse` are just `ScadablePolicy` with `docType` locked in, so a new document
+(`"privacy_policy"` by default, or `"terms_of_use"`), or with a tenant, `document` (the
+published document's slug, for example `"privacy-policy"`). `PrivacyPolicy` and
+`TermsOfUse` are just `ScadablePolicy` with the document locked in, so a new document
 type is a prop value, never a new package.
 
 ```svelte

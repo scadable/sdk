@@ -40,6 +40,10 @@ Every component package exposes the same API:
   type fixed.
 - `<ScadablePolicy token="..." docType="..." />`: any document type, including future ones.
 - Optional props: `className` (or `class`), `showVersion`, `baseUrl`.
+- For a document published to files.scadable.com, `tenant` takes the place of `token`
+  (`<PrivacyPolicy tenant="..." />`, `<ScadablePolicy tenant="..." document="privacy-policy" />`),
+  and the embed takes `data-tenant` and `data-document`. The SCADABLE app shows both values
+  in each published document's URL.
 
 ## JavaScript frameworks
 

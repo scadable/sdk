@@ -65,16 +65,37 @@ was published then; the browser refresh keeps already-deployed pages current in 
 builds. If you render with an adapter (SSR) instead of a static build, each request bakes
 the current version.
 
+### A published document (tenant)
+
+A document you approve in the SCADABLE app is also published at
+`https://files.scadable.com/{tenant}/{document}.html`. Give the tenant in place of the
+token; the wrappers know their document's slug.
+
+```astro
+---
+import PrivacyPolicy from '@scadable/astro/PrivacyPolicy.astro';
+import ScadablePolicy from '@scadable/astro/ScadablePolicy.astro';
+---
+<PrivacyPolicy tenant="YOUR_TENANT" />
+<ScadablePolicy tenant="YOUR_TENANT" document="terms-of-use" />
+```
+
+It is baked and refreshed the same way. The document is checked before it is rendered
+(`isAllowedHtml` in `@scadable/core`); one that is not made only of what a SCADABLE
+document may contain is not rendered, and a plain link to it is baked instead.
+
 ### Props
 
 These props apply to `PrivacyPolicy`, `TermsOfUse`, and `ScadablePolicy`.
 
 | Prop | Type | Default | Notes |
 | --- | --- | --- | --- |
-| `token` | `string` | required | Your scope's public token. |
+| `token` | `string` | required without a tenant | Your scope's public token. |
+| `tenant` | `string` | none | Your organization's id in SCADABLE, in place of a token. |
 | `class` / `className` | `string` | none | Class on the wrapper element. Either name works. |
-| `baseUrl` | `string` | `https://policy.scadable.com` | Override the API base. |
-| `docType` | `string` | `"privacy_policy"` | Which document to render. Only on `ScadablePolicy` (the wrappers fix it). |
+| `baseUrl` | `string` | `https://policy.scadable.com`, or `https://files.scadable.com` with a tenant | Override the base. |
+| `docType` | `string` | `"privacy_policy"` | Which document to render with a token. Only on `ScadablePolicy` (the wrappers fix it). |
+| `document` | `string` | required with a tenant | The published document's slug, for example `"privacy-policy"`. Only on `ScadablePolicy`. |
 
 ## Just the data
 

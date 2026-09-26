@@ -50,16 +50,36 @@ export default function Page() {
 
 Get `YOUR_PUBLIC_TOKEN` from the SCADABLE app after you publish a document.
 
+## A published document (tenant)
+
+A document you approve in the SCADABLE app is also published at
+`https://files.scadable.com/{tenant}/{document}.html`. Give the tenant in place of the
+token; the named components know their document's slug.
+
+```tsx
+import { PrivacyPolicy, ScadablePolicy } from '@scadable/react';
+
+<PrivacyPolicy tenant="YOUR_TENANT" />;
+<ScadablePolicy tenant="YOUR_TENANT" document="terms-of-use" />;
+```
+
+The document is checked before it is rendered (`isAllowedHtml` in `@scadable/core`). One
+that is not made only of what a SCADABLE document may contain is not rendered, and a plain
+link to it is shown instead. A token and a tenant are one or the other: TypeScript rejects
+both together.
+
 ## Options
 
 | Prop | Type | Default | Notes |
 | --- | --- | --- | --- |
-| `token` | `string` | required | Your scope's public token. |
-| `docType` | `string` | `"privacy_policy"` | Which document to render (`ScadablePolicy` only). |
+| `token` | `string` | required without a tenant | Your scope's public token. |
+| `docType` | `string` | `"privacy_policy"` | Which document to render with a token (`ScadablePolicy` only). |
+| `tenant` | `string` | none | Your organization's id in SCADABLE, in place of a token. |
+| `document` | `string` | required with a tenant | The published document's slug, for example `"privacy-policy"` (`ScadablePolicy` only). |
 | `className` | `string` | none | Class on the wrapper element. |
-| `showVersion` | `boolean` | `false` | Show a "Version N, last updated ..." line. |
-| `baseUrl` | `string` | `https://policy.scadable.com` | Override the API base. |
-| `initialHtml` | `string` | none | Pre-fetched HTML for SSR hosts. See below. |
+| `showVersion` | `boolean` | `false` | Show a "Version N, last updated ..." line. Token only. |
+| `baseUrl` | `string` | `https://policy.scadable.com`, or `https://files.scadable.com` with a tenant | Override the base. |
+| `initialHtml` | `string` | none | Pre-fetched HTML for SSR hosts. See below. With a tenant it is checked like the live copy. |
 
 ## Always live
 

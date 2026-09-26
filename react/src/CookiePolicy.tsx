@@ -2,14 +2,15 @@
 
 import * as React from 'react';
 
-import { ScadablePolicy } from './ScadablePolicy';
-import type { ScadablePolicyProps } from './ScadablePolicy';
+import { ScadablePolicy, forDocType } from './ScadablePolicy';
+import type { NamedDocumentProps } from './ScadablePolicy';
 
-export type CookiePolicyProps = Omit<ScadablePolicyProps, 'docType'>;
+export type CookiePolicyProps = NamedDocumentProps;
 
 /**
  * Renders your always-current cookie policy. A thin wrapper around
- * {@link ScadablePolicy} with `docType` pinned to "cookie_policy".
+ * {@link ScadablePolicy} with `docType` pinned to "cookie_policy". Pass a `token`,
+ * or the `tenant` the document is published under.
  *
  * ```tsx
  * import { CookiePolicy } from '@scadable/react';
@@ -20,5 +21,5 @@ export type CookiePolicyProps = Omit<ScadablePolicyProps, 'docType'>;
  * ```
  */
 export function CookiePolicy(props: CookiePolicyProps) {
-  return <ScadablePolicy {...props} docType="cookie_policy" />;
+  return <ScadablePolicy {...forDocType(props, 'cookie_policy')} />;
 }

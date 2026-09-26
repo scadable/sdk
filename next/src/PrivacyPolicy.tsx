@@ -1,8 +1,8 @@
-import { ScadablePolicy } from './ScadablePolicy';
-import type { ScadablePolicyProps } from './ScadablePolicy';
+import { ScadablePolicy, forDocType } from './ScadablePolicy';
+import type { NamedDocumentProps } from './ScadablePolicy';
 
-/** Props for <PrivacyPolicy>: the generic props minus `docType` (fixed to "privacy_policy"). */
-export type PrivacyPolicyProps = Omit<ScadablePolicyProps, 'docType'>;
+/** Props for <PrivacyPolicy>: a `token` or a `tenant`, with the document fixed to "privacy_policy". */
+export type PrivacyPolicyProps = NamedDocumentProps;
 
 /**
  * Renders your always-current privacy policy. A thin wrapper over {@link ScadablePolicy}
@@ -18,5 +18,5 @@ export type PrivacyPolicyProps = Omit<ScadablePolicyProps, 'docType'>;
  * ```
  */
 export function PrivacyPolicy(props: PrivacyPolicyProps) {
-  return ScadablePolicy({ ...props, docType: 'privacy_policy' });
+  return ScadablePolicy(forDocType(props, 'privacy_policy'));
 }

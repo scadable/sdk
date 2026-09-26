@@ -7,5 +7,20 @@
 //
 // This entry exists for the "render it yourself" case: it re-exports the
 // @scadable/core fetch client and types so there is one place to import from.
-export { fetchPolicy, DEFAULT_BASE_URL } from '@scadable/core';
-export type { Policy, FetchPolicyOptions } from '@scadable/core';
+export {
+  fetchPolicy,
+  DEFAULT_BASE_URL,
+  fetchDocument,
+  documentSlug,
+  documentUrl,
+  DEFAULT_DOCUMENT_BASE_URL,
+} from '@scadable/core';
+export type {
+  Policy,
+  FetchPolicyOptions,
+  PublishedDocument,
+  FetchDocumentOptions,
+  DocumentRef,
+  DocumentSource,
+  DocumentOwner,
+} from '@scadable/core';

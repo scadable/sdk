@@ -94,6 +94,9 @@ export default function Page() {
 - `<PrivacyPolicy token="..." />`, `<TermsOfUse token="..." />`, `<CookiePolicy token="..." />`, and `<Imprint token="..." />` are token-only.
 - `<ScadablePolicy token="..." docType="..." />` renders any document type, including
   future ones.
+- A document published to files.scadable.com is named by your tenant instead:
+  `<PrivacyPolicy tenant="..." />`, or `<ScadablePolicy tenant="..." document="..." />`.
+  See [Published documents](#published-documents-tenant-and-document).
 
 ## The API every plugin consumes
 
@@ -129,9 +132,45 @@ Response (`format=json`):
 **Trust boundary:** the `html` is your own first-party document served by SCADABLE over
 HTTPS, so every renderer injects it directly (`dangerouslySetInnerHTML` / `innerHTML` /
 `{@html}`) with no client-side sanitization, which is safe for trusted first-party HTML.
+A published document (below) is checked before it is injected.
 
 The shared fetch client and types live in [`@scadable/core`](./core); every other JS
 package builds on it.
+
+## Published documents: tenant and document
+
+A document you approve in the SCADABLE app is also published as a plain HTML file:
+
+```
+GET https://files.scadable.com/{tenant}/{document}.html
+```
+
+`tenant` is your organization's id in SCADABLE and `document` is the document's slug:
+`privacy-policy`, `terms-of-use`, `cookie-policy`, or `imprint`. The SCADABLE app shows
+each document's URL once it is published, and both values come from that URL.
+
+Every package takes the two in place of a token:
+
+```tsx
+<PrivacyPolicy tenant="YOUR_TENANT" />
+<ScadablePolicy tenant="YOUR_TENANT" document="terms-of-use" />
+```
+
+```html
+<div class="scadable-policy" data-tenant="YOUR_TENANT" data-document="privacy-policy"></div>
+<script src="https://cdn.jsdelivr.net/npm/@scadable/embed@0.2/dist/embed.js" async></script>
+```
+
+The named components map their document type to its slug (`privacy_policy` is
+`privacy-policy`), so `<PrivacyPolicy tenant="..." />` needs nothing else.
+
+Before a published document is put into your page it is checked against the HTML a
+SCADABLE document may contain: headings to three levels, paragraphs, line breaks, bold,
+italic and underlined text, lists, quotations, and links to http, https or mailto, with
+no other attribute anywhere. A document that fails the check is not inserted, and a plain
+link to it is shown instead. The check is `isAllowedHtml` in [`@scadable/core`](./core).
+
+If your site sends a Content-Security-Policy, allow `connect-src https://files.scadable.com`.
 
 ## Hybrid: baked for SEO, refreshed for live
 
@@ -179,6 +218,7 @@ This is an npm workspaces monorepo. One install at the root wires every package 
 npm install            # install all workspaces (single root node_modules)
 npm run build          # build every package
 npm run typecheck      # type-check every package
+npm test               # run the tests (@scadable/core's node:test suite)
 ```
 
 Work on a single package:
@@ -197,8 +237,8 @@ npm packages publish through a GitHub Release using npm Trusted Publishing (OIDC
 2. Merge to `main`.
 3. Publish a GitHub Release.
 
-`.github/workflows/publish.yml` then builds and publishes every workspace whose version is
-not yet on npm, and skips the rest. A brand-new package must be registered once as a
+`.github/workflows/publish.yml` then builds, type-checks and tests every package, and
+publishes every workspace whose version is not yet on npm, skipping the rest. A brand-new package must be registered once as a
 Trusted Publisher on npmjs.com first. Full steps, plus how to add a new platform package,
 are in [CONTRIBUTING.md](./CONTRIBUTING.md).
 

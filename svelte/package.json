@@ -1,6 +1,6 @@
 {
   "name": "@scadable/svelte",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Render your always-current SCADABLE privacy policy or terms of use in a Svelte or SvelteKit app.",
   "license": "MIT",
   "type": "module",
@@ -32,7 +32,7 @@
     "sveltekit"
   ],
   "dependencies": {
-    "@scadable/core": "^0.1.2"
+    "@scadable/core": "^0.2.0"
   },
   "peerDependencies": {
     "svelte": ">=4"

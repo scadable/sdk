@@ -2,27 +2,48 @@
 
 import * as React from 'react';
 
-import { fetchPolicy } from '@scadable/core';
-import type { FetchPolicyOptions, Policy } from '@scadable/core';
+import { documentSlug, fetchDocument, fetchPolicy, isAllowedHtml } from '@scadable/core';
+import type { DocumentOwner, DocumentSource, FetchPolicyOptions, Policy } from '@scadable/core';
 
-export interface ScadablePolicyProps {
-  /** The public token from the SCADABLE app. */
-  token: string;
-  /** Which document to render. Default "privacy_policy". */
-  docType?: string;
+/** How the document is shown, whichever way it is named. */
+interface DisplayProps {
   /** Optional wrapper class so you can style/position the document. */
   className?: string;
-  /** Show a small "Version N, last updated ..." line under the document. Default false. */
+  /**
+   * Show a small "Version N, last updated ..." line under the document. Default
+   * false. Only a token's document has a version to show.
+   */
   showVersion?: boolean;
-  /** Override the API base. Default "https://policy.scadable.com". */
+  /**
+   * Override the base. Default "https://policy.scadable.com" for a token and
+   * "https://files.scadable.com" for a tenant.
+   */
   baseUrl?: string;
   /**
    * HTML you already fetched (a host that did its own SSR or build-time fetch can
    * pass it). It renders immediately, so the legal text and the "by scadable.com"
    * backlink are crawlable for SEO with no flash, then the live copy is swapped in
-   * on mount. Omit it for a pure client-only SPA.
+   * on mount. Omit it for a pure client-only SPA. With a tenant it is shown only
+   * when it passes the same allowlist check as the live copy.
    */
   initialHtml?: string;
+}
+
+/**
+ * Which document to render, a `token` with a `docType` or a `tenant` with a
+ * `document`, and how to show it.
+ */
+export type ScadablePolicyProps = DocumentSource & DisplayProps;
+
+/** Props of a component that fixes its document: a `token` or a `tenant`. */
+export type NamedDocumentProps = DocumentOwner & DisplayProps;
+
+/**
+ * A named component's props, pointed at its document: the document type for a
+ * token, and the slug that type is published under for a tenant.
+ */
+export function forDocType(props: NamedDocumentProps, docType: string): ScadablePolicyProps {
+  return props.tenant !== undefined ? { ...props, document: documentSlug(docType) } : { ...props, docType };
 }
 
 /**
@@ -37,6 +58,11 @@ export interface ScadablePolicyProps {
  * (a strict Content-Security-Policy) or offline, it keeps whatever is already shown,
  * so the page is never blank.
  *
+ * Name the document with a `token` and a `docType`, or with the `tenant` and
+ * `document` of a document published to files.scadable.com. A published document
+ * is inserted only when it passes the allowlist check in @scadable/core, and is a
+ * plain link to where it is published when it does not.
+ *
  * ```tsx
  * import { ScadablePolicy } from '@scadable/react';
  *
@@ -45,42 +71,56 @@ export interface ScadablePolicyProps {
  * }
  * ```
  */
-export function ScadablePolicy({
-  token,
-  docType = 'privacy_policy',
-  className,
-  showVersion = false,
-  baseUrl,
-  initialHtml,
-}: ScadablePolicyProps) {
-  const [html, setHtml] = React.useState<string | undefined>(initialHtml);
+export function ScadablePolicy(props: ScadablePolicyProps) {
+  const { className, showVersion = false, baseUrl, initialHtml } = props;
+  // Read off props rather than destructured: `document` would shadow the DOM global.
+  const token = props.token;
+  const docType = props.docType ?? 'privacy_policy';
+  const tenant = props.tenant;
+  const slug = props.document;
+
+  const [html, setHtml] = React.useState<string | undefined>(() =>
+    tenant !== undefined && initialHtml !== undefined && !isAllowedHtml(initialHtml) ? undefined : initialHtml,
+  );
   const [version, setVersion] = React.useState<number | undefined>(undefined);
   const [updatedAt, setUpdatedAt] = React.useState<string | null>(null);
   const [errored, setErrored] = React.useState(false);
 
   React.useEffect(() => {
     let alive = true;
-    const opts: FetchPolicyOptions = { docType, revalidate: false };
-    if (baseUrl) opts.baseUrl = baseUrl;
-    fetchPolicy(token, opts)
-      .then((p: Policy) => {
-        if (!alive || !p?.html) return;
-        setHtml(p.html);
-        setVersion(p.version);
-        setUpdatedAt(p.updated_at);
-        setErrored(false);
-      })
-      .catch((err: unknown) => {
-        // Keep whatever is shown (initialHtml or the loading line) if the browser
-        // fetch is blocked (CSP), offline, or the token/API is bad, but make the
-        // failure visible: warn and mark the node so it is debuggable.
-        if (alive) setErrored(true);
-        console.warn(`[@scadable/react] failed to load policy for token "${token}"`, err);
-      });
+    // Keep whatever is shown (initialHtml or the loading line) if the browser
+    // fetch is blocked (CSP), offline, or the token/API is bad, but make the
+    // failure visible: warn and mark the node so it is debuggable.
+    const fail = (what: string) => (err: unknown) => {
+      if (alive) setErrored(true);
+      console.warn(`[@scadable/react] failed to load ${what}`, err);
+    };
+
+    if (tenant !== undefined) {
+      fetchDocument({ tenant, document: slug ?? '' }, { baseUrl, revalidate: false })
+        .then((doc) => {
+          if (!alive || !doc.html) return;
+          setHtml(doc.html);
+          setErrored(false);
+        })
+        .catch(fail(`document "${slug}" for tenant "${tenant}"`));
+    } else {
+      const opts: FetchPolicyOptions = { docType, revalidate: false };
+      if (baseUrl) opts.baseUrl = baseUrl;
+      fetchPolicy(token ?? '', opts)
+        .then((p: Policy) => {
+          if (!alive || !p?.html) return;
+          setHtml(p.html);
+          setVersion(p.version);
+          setUpdatedAt(p.updated_at);
+          setErrored(false);
+        })
+        .catch(fail(`policy for token "${token}"`));
+    }
     return () => {
       alive = false;
     };
-  }, [token, docType, baseUrl]);
+  }, [token, docType, tenant, slug, baseUrl]);
 
   return (
     <div className={className} data-scadable-error={errored ? 'true' : undefined}>

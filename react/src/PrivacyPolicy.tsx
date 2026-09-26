@@ -2,14 +2,15 @@
 
 import * as React from 'react';
 
-import { ScadablePolicy } from './ScadablePolicy';
-import type { ScadablePolicyProps } from './ScadablePolicy';
+import { ScadablePolicy, forDocType } from './ScadablePolicy';
+import type { NamedDocumentProps } from './ScadablePolicy';
 
-export type PrivacyPolicyProps = Omit<ScadablePolicyProps, 'docType'>;
+export type PrivacyPolicyProps = NamedDocumentProps;
 
 /**
  * Renders your always-current privacy policy. A thin wrapper around
- * {@link ScadablePolicy} with `docType` pinned to "privacy_policy".
+ * {@link ScadablePolicy} with `docType` pinned to "privacy_policy". Pass a `token`,
+ * or the `tenant` the document is published under.
  *
  * ```tsx
  * import { PrivacyPolicy } from '@scadable/react';
@@ -20,5 +21,5 @@ export type PrivacyPolicyProps = Omit<ScadablePolicyProps, 'docType'>;
  * ```
  */
 export function PrivacyPolicy(props: PrivacyPolicyProps) {
-  return <ScadablePolicy {...props} docType="privacy_policy" />;
+  return <ScadablePolicy {...forDocType(props, 'privacy_policy')} />;
 }
