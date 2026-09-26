@@ -38,7 +38,7 @@
     "@scadable/core": "^0.2.0"
   },
   "peerDependencies": {
-    "vue": ">=3"
+    "vue": ">=3.3"
   },
   "devDependencies": {
     "vue": "^3.5.0",

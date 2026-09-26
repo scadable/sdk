@@ -55,7 +55,7 @@ token; the named components know their document's slug.
 The document is checked before it is rendered (`isAllowedHtml` in `@scadable/core`). One
 that is not made only of what a SCADABLE document may contain is not rendered, and a plain
 link to it is shown instead. A token and a tenant are one or the other; the components are
-typed that way for Vue 3.3 and later.
+typed that way, which needs Vue 3.3 or later (the peer range says so).
 
 ## Props
 
