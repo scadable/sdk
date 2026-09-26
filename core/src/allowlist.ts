@@ -45,10 +45,17 @@ const URL_SCHEMES = new Set(['http:', 'https:', 'mailto:']);
 // Each pattern is sticky and only ever run from a position the loop below sets.
 // Text is anything up to the next `<`: in a browser nothing else in text can open
 // an element, and none of the allowed tags switch the parser out of reading text.
+//
+// EXACTLY ONE SPACE before each attribute and none before `>`. That is how policy's
+// serializer writes canonical HTML, and it keeps every pattern linear: a separator
+// that could be a run of whitespace can split that run many ways between an
+// attribute and the tag's end, which is quadratic on a long run (CodeQL
+// js/polynomial-redos). A document spaced any other way is not canonical and is
+// refused like any other.
 const TEXT = /[^<]+/y;
-const START = /<([A-Za-z][A-Za-z0-9]*)((?:[\t\n\f\r ]+[A-Za-z][A-Za-z0-9-]*="[^"]*")*)[\t\n\f\r ]*(\/?)>/y;
-const END = /<\/([A-Za-z][A-Za-z0-9]*)[\t\n\f\r ]*>/y;
-const ATTRIBUTE = /[\t\n\f\r ]+([A-Za-z][A-Za-z0-9-]*)="([^"]*)"/g;
+const START = /<([A-Za-z][A-Za-z0-9]*)((?: [A-Za-z][A-Za-z0-9-]*="[^"]*")*)(\/?)>/y;
+const END = /<\/([A-Za-z][A-Za-z0-9]*)>/y;
+const ATTRIBUTE = / ([A-Za-z][A-Za-z0-9-]*)="([^"]*)"/g;
 
 // Only the references a serializer writes in an attribute value. Any other `&`
 // is refused rather than decoded, because a browser decodes the full table

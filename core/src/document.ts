@@ -31,7 +31,7 @@ export function documentUrl(ref: DocumentRef, options: Pick<FetchDocumentOptions
   if (typeof slug !== 'string' || !DOCUMENT.test(slug)) {
     throw new Error(`@scadable/core: ${JSON.stringify(slug)} is not a document slug (for example "privacy-policy")`);
   }
-  const base = (options.baseUrl ?? DEFAULT_DOCUMENT_BASE_URL).replace(/\/+$/, '');
+  const base = trimTrailingSlashes(options.baseUrl ?? DEFAULT_DOCUMENT_BASE_URL);
   let protocol = '';
   try {
     protocol = new URL(base).protocol;
@@ -82,4 +82,12 @@ export async function fetchDocument(ref: DocumentRef, options: FetchDocumentOpti
     `[@scadable/core] ${url} contains HTML a SCADABLE document may not, so it was not inserted. Showing a link to it instead.`,
   );
   return { html: linkTo(url, ref.document), url };
+}
+
+/** Drops trailing `/`s with a loop rather than `/\/+$/`, which is quadratic on a long
+ * run of slashes followed by anything else (CodeQL js/polynomial-redos). */
+function trimTrailingSlashes(value: string): string {
+  let end = value.length;
+  while (end > 0 && value.charCodeAt(end - 1) === 47) end -= 1;
+  return value.slice(0, end);
 }

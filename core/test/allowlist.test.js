@@ -48,10 +48,15 @@ const ACCEPTED = [
   ['non-ASCII text', '<p>Café Zürich, 日本語</p>'],
   ['a self-closing br', '<p>a<br/>b</p>'],
   ['uppercase tags', '<P>x</P>'],
-  ['whitespace inside tags', '<p >x</p\n><a\nhref="https://example.com"\trel="noopener noreferrer" >y</a>'],
 ];
 
 const REFUSED = [
+  // Canonical HTML has exactly one space before each attribute and none before `>`;
+  // anything else is refused, which is also what keeps the parser linear.
+  ['whitespace before a tag ends', '<p >x</p>'],
+  ['a newline before an attribute', '<a\nhref="https://example.com" rel="noopener noreferrer">y</a>'],
+  ['a tab between attributes', '<a href="https://example.com"\trel="noopener noreferrer">y</a>'],
+  ['a long run of whitespace in a tag', '<a' + '\t'.repeat(100000)],
   ['a script', '<script>alert(1)</script><p>x</p>'],
   ['a script split around another', '<scr<script>ipt>alert(1)</script>'],
   ['an onclick handler', '<p onclick="alert(1)">x</p>'],
