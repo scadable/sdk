@@ -149,7 +149,7 @@ function escapeAttr(value: string): string {
 
 /**
  * Assemble the recommended HYBRID PASTE SNIPPET from a token and the current
- * policy HTML (as returned by `GET /v1/policy/{token}?...&format=json`).
+ * policy HTML (as returned by `GET /policy/{token}?...&format=json`).
  *
  * The result is a `<div class="scadable-policy">` with the real policy text
  * baked inside it - crawlable by Google and by AI engines that do not run JS,
