@@ -37,6 +37,12 @@ jobs:
 
       - run: npm run build
 
+      # Nothing publishes unless every package type-checks and the tests pass. Before
+      # these two steps a successful build was the only check between main and npm.
+      - run: npm run typecheck
+
+      - run: npm test
+
       - name: Publish workspaces whose version is new
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

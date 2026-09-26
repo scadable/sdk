@@ -43,6 +43,25 @@ offline, the baked snapshot stays on screen - the page is never blank.
 > Why not an iframe? An iframe credits the backlink to policy.scadable.com instead of your
 > page, which kills the SEO value. Use the hybrid snippet.
 
+## A published document: tenant and document
+
+A document you approve in the SCADABLE app is also published at
+`https://files.scadable.com/{tenant}/{document}.html`. Name it with `data-tenant` and
+`data-document` in place of a token; the SCADABLE app shows both in the document's URL.
+
+```html
+<div class="scadable-policy" data-tenant="YOUR_TENANT" data-document="privacy-policy"></div>
+<script src="https://cdn.jsdelivr.net/npm/@scadable/embed@0.2/dist/embed.js" async></script>
+```
+
+The custom element takes the same two:
+`<scadable-policy tenant="YOUR_TENANT" document="privacy-policy"></scadable-policy>`.
+
+The document is checked before it goes into your page (`isAllowedHtml` in
+`@scadable/core`). One that is not made only of what a SCADABLE document may contain is
+not inserted, and a plain link to it is shown instead. A tenant wins over a token on the
+same element, so an existing snippet moves over by adding the two attributes.
+
 ## Other ways to embed
 
 ### b. Minimal custom element (simplest, live-only)
@@ -71,9 +90,11 @@ last resort.
 
 | Attribute | Where | Default | Notes |
 | --- | --- | --- | --- |
-| `data-token` / `token` | required | - | Your scope's public token from the SCADABLE app. |
+| `data-token` / `token` | required without a tenant | - | Your scope's public token from the SCADABLE app. |
 | `data-doc-type` / `doc-type` | optional | `privacy_policy` | `privacy_policy`, `terms_of_use`, or any future type. |
-| `data-base-url` / `base-url` | optional | `https://policy.scadable.com` | Override the API base. Rarely needed. |
+| `data-tenant` / `tenant` | in place of a token | - | Your organization's id in SCADABLE, for a published document. |
+| `data-document` / `document` | with a tenant | - | The published document's slug: `privacy-policy`, `terms-of-use`, `cookie-policy`, or `imprint`. |
+| `data-base-url` / `base-url` | optional | `https://policy.scadable.com` for a token, `https://files.scadable.com` for a tenant | Override the base. Rarely needed. |
 
 Use the `data-*` form on a `<div class="scadable-policy">`; use the bare form on the
 `<scadable-policy>` element. Both behave identically.
@@ -101,11 +122,12 @@ In every case it is the **same one snippet**. Paste it once per document.
 
 ## Content-Security-Policy note
 
-If your site sends a `Content-Security-Policy` header, allow the script and the API:
+If your site sends a `Content-Security-Policy` header, allow the script and the API (and
+files.scadable.com for a published document):
 
 ```
 script-src https://cdn.jsdelivr.net;
-connect-src https://policy.scadable.com;
+connect-src https://policy.scadable.com https://files.scadable.com;
 ```
 
 (If you self-host the script instead of jsdelivr, point `script-src` at your host.) The

@@ -67,18 +67,38 @@ SCADABLE go live with no redeploy on your side. If a strict Content-Security-Pol
 the browser fetch (or the visitor is offline), the baked copy stays put, so the page is
 never blank.
 
+### A published document (tenant)
+
+A document you approve in the SCADABLE app is also published at
+`https://files.scadable.com/{tenant}/{document}.html`. Give the tenant in place of the
+token; the wrappers know their document's slug.
+
+```tsx
+import { PrivacyPolicy, ScadablePolicy } from '@scadable/next';
+
+<PrivacyPolicy tenant="YOUR_TENANT" />;
+<ScadablePolicy tenant="YOUR_TENANT" document="terms-of-use" />;
+```
+
+It is baked and refreshed the same way. The document is checked before it is rendered
+(`isAllowedHtml` in `@scadable/core`); one that is not made only of what a SCADABLE
+document may contain is not rendered, and a plain link to it is baked instead. A token and
+a tenant are one or the other: TypeScript rejects both together.
+
 ### Options
 
 These props apply to `PrivacyPolicy`, `TermsOfUse`, and `ScadablePolicy`.
 
 | Prop | Type | Default | Notes |
 | --- | --- | --- | --- |
-| `token` | `string` | required | Your scope's public token. |
+| `token` | `string` | required without a tenant | Your scope's public token. |
+| `tenant` | `string` | none | Your organization's id in SCADABLE, in place of a token. |
 | `className` | `string` | none | Class on the wrapper element. |
-| `showVersion` | `boolean` | `false` | Show a "Version N, last updated ..." line. |
+| `showVersion` | `boolean` | `false` | Show a "Version N, last updated ..." line. Token only. |
 | `revalidate` | `number \| false` | `3600` | Next.js ISR seconds. `false` = always fresh. |
-| `baseUrl` | `string` | `https://policy.scadable.com` | Override the API base. |
-| `docType` | `string` | `"privacy_policy"` | Which document to render. Only on `ScadablePolicy` (the wrappers fix it). |
+| `baseUrl` | `string` | `https://policy.scadable.com`, or `https://files.scadable.com` with a tenant | Override the base. |
+| `docType` | `string` | `"privacy_policy"` | Which document to render with a token. Only on `ScadablePolicy` (the wrappers fix it). |
+| `document` | `string` | required with a tenant | The published document's slug, for example `"privacy-policy"`. Only on `ScadablePolicy`. |
 
 ## Just the data
 
@@ -94,6 +114,15 @@ const policy = await fetchPolicy('YOUR_PUBLIC_TOKEN', { docType: 'terms_of_use' 
 
 `policy.html` is a self-styled HTML content fragment that inherits the host page's text
 color, safe to inject inline. It already includes the "by scadable.com" backlink.
+
+A published document comes from `fetchDocument`, whose `html` is already checked:
+
+```ts
+import { fetchDocument, documentSlug } from '@scadable/next';
+
+const doc = await fetchDocument({ tenant: 'YOUR_TENANT', document: documentSlug('terms_of_use') });
+// { html, url }
+```
 
 ## Notes
 

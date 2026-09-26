@@ -7,7 +7,9 @@ embed uses a baked snapshot instead of an iframe or a bare script.
 
 ## The shape of the system
 
-There is exactly one source of truth, the public API, and a fan of thin adapters over it.
+There is one source of truth for a token's document, the public API, and a fan of thin
+adapters over it. A published document has a second source, described
+[below](#published-documents-the-second-source).
 
 ```
                          GET /policy/{token}?doc_type=...&format=json
@@ -31,7 +33,8 @@ platform.
 
 ## `@scadable/core`: the one fetch
 
-`@scadable/core` exports a single function and the shared types:
+`@scadable/core` exports the fetch for a token, the fetch for a published document (next
+section), and the shared types:
 
 ```ts
 import { fetchPolicy } from '@scadable/core';
@@ -53,6 +56,23 @@ parsed object. Two details make it work across every runtime:
 Because every package depends on `@scadable/core`, there is one definition of the request,
 the response shape, and the default base URL. Fix or extend it once and every platform
 inherits the change.
+
+## Published documents: the second source
+
+A document approved in the SCADABLE app is also published as a static HTML file at
+`https://files.scadable.com/{tenant}/{document}.html`. `fetchDocument({ tenant, document })`
+in `@scadable/core` reads it, and every package takes a `tenant` (and, on the generic
+component and the embed, a `document`) in place of a token. The named components map
+their document type to the published slug with `documentSlug`: `privacy_policy` is
+`privacy-policy`.
+
+That file is served from one origin shared by every organization, and the SDK puts it
+into the customer's own page, so `fetchDocument` checks it before handing it over: the
+tags, attributes and URL schemes of the allowlist the policy service holds every document
+to, read as a strict subset of HTML so that the same check runs in a browser, on a server
+that bakes the page, and in tests. A document that fails is never inserted; a plain link
+to it is returned in its place. The token path is unchanged, because its fragments carry
+their own styles and are trusted as before.
 
 ## The framework packages
 

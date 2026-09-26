@@ -1,8 +1,8 @@
-import { ScadablePolicy } from './ScadablePolicy';
-import type { ScadablePolicyProps } from './ScadablePolicy';
+import { ScadablePolicy, forDocType } from './ScadablePolicy';
+import type { NamedDocumentProps } from './ScadablePolicy';
 
-/** Props for <Imprint>: the generic props minus `docType` (fixed to "imprint"). */
-export type ImprintProps = Omit<ScadablePolicyProps, 'docType'>;
+/** Props for <Imprint>: a `token` or a `tenant`, with the document fixed to "imprint". */
+export type ImprintProps = NamedDocumentProps;
 
 /**
  * Renders your always-current imprint. A thin wrapper over {@link ScadablePolicy}
@@ -18,5 +18,5 @@ export type ImprintProps = Omit<ScadablePolicyProps, 'docType'>;
  * ```
  */
 export function Imprint(props: ImprintProps) {
-  return ScadablePolicy({ ...props, docType: 'imprint' });
+  return ScadablePolicy(forDocType(props, 'imprint'));
 }

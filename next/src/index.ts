@@ -1,6 +1,21 @@
 // Fetch client + types come from @scadable/core (shared across every platform package).
-export { fetchPolicy, DEFAULT_BASE_URL } from '@scadable/core';
-export type { Policy, FetchPolicyOptions } from '@scadable/core';
+export {
+  fetchPolicy,
+  DEFAULT_BASE_URL,
+  fetchDocument,
+  documentSlug,
+  documentUrl,
+  DEFAULT_DOCUMENT_BASE_URL,
+} from '@scadable/core';
+export type {
+  Policy,
+  FetchPolicyOptions,
+  PublishedDocument,
+  FetchDocumentOptions,
+  DocumentRef,
+  DocumentSource,
+  DocumentOwner,
+} from '@scadable/core';
 
 // Generic server component (any docType) + the back-compat / convenience wrappers.
 export { ScadablePolicy } from './ScadablePolicy';

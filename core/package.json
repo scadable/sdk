@@ -1,6 +1,6 @@
 {
   "name": "@scadable/core",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Shared fetch client + types for the SCADABLE document SDK (privacy policy, terms of use, and more).",
   "license": "MIT",
   "type": "module",
@@ -23,6 +23,8 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
+    "pretest": "npm run build",
+    "test": "node --test test/*.test.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

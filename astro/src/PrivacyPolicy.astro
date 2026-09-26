@@ -1,18 +1,28 @@
 ---
+import { documentSlug } from '@scadable/core';
+import type { DocumentOwner } from '@scadable/core';
 import ScadablePolicy from './ScadablePolicy.astro';
 
-export interface Props {
-  /** The public token from the SCADABLE app. */
-  token: string;
+export type Props = DocumentOwner & {
   /** Class on the wrapper element. Both `class` and `className` are accepted. */
   class?: string;
   className?: string;
-  /** Override the API base. Default "https://policy.scadable.com". */
+  /**
+   * Override the base. Default "https://policy.scadable.com" for a token and
+   * "https://files.scadable.com" for a tenant.
+   */
   baseUrl?: string;
-}
+};
 
-// Thin wrapper: ScadablePolicy with the doc type fixed. A new document type is a
-// prop value on ScadablePolicy, never a new package.
+// Thin wrapper: ScadablePolicy with the doc type fixed, or for a tenant the slug that
+// type is published under. A new document type is a prop value on ScadablePolicy,
+// never a new package.
 ---
 
-<ScadablePolicy {...Astro.props} docType="privacy_policy" />
+{
+  Astro.props.tenant !== undefined ? (
+    <ScadablePolicy {...Astro.props} document={documentSlug('privacy_policy')} />
+  ) : (
+    <ScadablePolicy {...Astro.props} docType="privacy_policy" />
+  )
+}

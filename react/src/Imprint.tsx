@@ -2,14 +2,15 @@
 
 import * as React from 'react';
 
-import { ScadablePolicy } from './ScadablePolicy';
-import type { ScadablePolicyProps } from './ScadablePolicy';
+import { ScadablePolicy, forDocType } from './ScadablePolicy';
+import type { NamedDocumentProps } from './ScadablePolicy';
 
-export type ImprintProps = Omit<ScadablePolicyProps, 'docType'>;
+export type ImprintProps = NamedDocumentProps;
 
 /**
  * Renders your always-current imprint. A thin wrapper around
- * {@link ScadablePolicy} with `docType` pinned to "imprint".
+ * {@link ScadablePolicy} with `docType` pinned to "imprint". Pass a `token`,
+ * or the `tenant` the document is published under.
  *
  * ```tsx
  * import { Imprint } from '@scadable/react';
@@ -20,5 +21,5 @@ export type ImprintProps = Omit<ScadablePolicyProps, 'docType'>;
  * ```
  */
 export function Imprint(props: ImprintProps) {
-  return <ScadablePolicy {...props} docType="imprint" />;
+  return <ScadablePolicy {...forDocType(props, 'imprint')} />;
 }

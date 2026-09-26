@@ -12,10 +12,13 @@ adapter matches the contract the rest of the family follows.
 - The eight `@scadable/*` folders are npm workspaces, listed in the root
   [`package.json`](./package.json) under `workspaces` and built by `npm run build`.
 - Every JavaScript package depends on [`@scadable/core`](./core) for the fetch and types.
-  Do not re-implement the request; import `fetchPolicy`.
+  Do not re-implement the request; import `fetchPolicy`, or `fetchDocument` for a published
+  document. Never insert a published document that has not come through `fetchDocument` or
+  passed `isAllowedHtml`.
 - Components are token-first: expose `<PrivacyPolicy>` and `<TermsOfUse>` (token-only) plus
   a generic `<ScadablePolicy docType="...">`. Never require more than the token for the
-  common case.
+  common case. Each also takes a `tenant` in place of the token (the generic one a `tenant`
+  and a `document`) for a document published to files.scadable.com.
 - Frameworks that can render on the server use the hybrid render (bake then refresh).
   Client-only platforms fetch on mount and accept an optional `initialHtml`.
 - No em dashes in any text a user reads (UI copy, console output, package descriptions,
@@ -29,10 +32,18 @@ adapter matches the contract the rest of the family follows.
 npm install            # install every workspace (single root node_modules)
 npm run build          # build all packages
 npm run typecheck      # type-check all packages
+npm test               # run the tests
 
 npm run build -w @scadable/next   # one package
 npm run dev   -w @scadable/core   # tsup --watch
 ```
+
+`npm test` runs `@scadable/core`'s `node:test` suite. It builds the package first and
+tests `dist`, the files that are published. Two of its tests read documents from SCADABLE
+repositories that are not public (engine's golden Business Basics documents and policy's
+HTML allowlist contract) and skip, saying why, when those are not checked out beside this
+one. Set `SCADABLE_WORKSPACE` to the directory that holds the `engine` and `policy`
+checkouts to run them.
 
 Do not commit `dist/` or `node_modules/` (both are gitignored). The publish workflow builds
 fresh from source.
@@ -97,7 +108,8 @@ To release:
 3. Publish a GitHub Release (Releases, then Draft a new release, choose a tag, Publish). You
    can also run the workflow manually from the Actions tab (`workflow_dispatch`).
 
-On a published release the workflow checks out `main`, installs, runs `npm run build`, then
+On a published release the workflow checks out `main`, installs, runs `npm run build`,
+`npm run typecheck` and `npm test` (a failure in any of them publishes nothing), then
 walks `core next react astro vue svelte embed wizard` and, for each, compares the
 `package.json` version against npm. New versions are published with `npm publish --access
 public --provenance`; versions already on npm are skipped. So a release only publishes what
@@ -125,7 +137,7 @@ workflow take over from there.
 ## Pull requests
 
 - Keep a change scoped to one concern. Adjacent cleanup goes in its own PR.
-- Run `npm run build` and `npm run typecheck` before opening the PR.
+- Run `npm run build`, `npm run typecheck` and `npm test` before opening the PR.
 - Update the root README table, [docs/platforms.md](./docs/platforms.md), and the package's
   own README when you add or rename a package.
 - Do not commit secrets, `.env` files, `dist/`, or `node_modules/`.

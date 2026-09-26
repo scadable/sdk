@@ -1,6 +1,6 @@
 {
   "name": "@scadable/next",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Render your always-current SCADABLE privacy policy or terms of use in a Next.js app (hybrid SSR bake + live refresh).",
   "license": "MIT",
   "type": "module",
@@ -37,7 +37,7 @@
     "react"
   ],
   "dependencies": {
-    "@scadable/core": "^0.1.2"
+    "@scadable/core": "^0.2.0"
   },
   "peerDependencies": {
     "next": ">=13",

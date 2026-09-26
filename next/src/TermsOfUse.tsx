@@ -1,8 +1,8 @@
-import { ScadablePolicy } from './ScadablePolicy';
-import type { ScadablePolicyProps } from './ScadablePolicy';
+import { ScadablePolicy, forDocType } from './ScadablePolicy';
+import type { NamedDocumentProps } from './ScadablePolicy';
 
-/** Props for <TermsOfUse>: the generic props minus `docType` (fixed to "terms_of_use"). */
-export type TermsOfUseProps = Omit<ScadablePolicyProps, 'docType'>;
+/** Props for <TermsOfUse>: a `token` or a `tenant`, with the document fixed to "terms_of_use". */
+export type TermsOfUseProps = NamedDocumentProps;
 
 /**
  * Renders your always-current terms of use. A thin wrapper over {@link ScadablePolicy}
@@ -18,5 +18,5 @@ export type TermsOfUseProps = Omit<ScadablePolicyProps, 'docType'>;
  * ```
  */
 export function TermsOfUse(props: TermsOfUseProps) {
-  return ScadablePolicy({ ...props, docType: 'terms_of_use' });
+  return ScadablePolicy(forDocType(props, 'terms_of_use'));
 }

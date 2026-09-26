@@ -8,4 +8,11 @@ export { CookiePolicy } from './CookiePolicy';
 export type { CookiePolicyProps } from './CookiePolicy';
 export { Imprint } from './Imprint';
 export type { ImprintProps } from './Imprint';
-export type { Policy, FetchPolicyOptions } from '@scadable/core';
+export type {
+  Policy,
+  FetchPolicyOptions,
+  PublishedDocument,
+  FetchDocumentOptions,
+  DocumentSource,
+  DocumentOwner,
+} from '@scadable/core';

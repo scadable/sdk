@@ -1,5 +1,5 @@
-import { fetchPolicy } from '@scadable/core';
-import type { Policy } from '@scadable/core';
+import { fetchDocument, fetchPolicy } from '@scadable/core';
+import type { DocumentSource, Policy, PublishedDocument } from '@scadable/core';
 
 /**
  * @scadable/embed - the universal embed.
@@ -16,6 +16,12 @@ import type { Policy } from '@scadable/core';
  * for the live version in the browser. We render into LIGHT DOM (never an
  * iframe, never a shadow root) so the host page's fonts and colors flow in and
  * the backlink is credited to the host page, not to policy.scadable.com.
+ *
+ * An element names its document one of two ways: a token and a document type,
+ * or a tenant and a document slug for a document published to
+ * files.scadable.com. A published document is inserted only when it passes the
+ * allowlist check in @scadable/core; one that does not becomes a plain link to
+ * where it is published.
  */
 
 /** CSS class that marks a plain `<div>` as a policy mount point. */
@@ -30,34 +36,48 @@ export const DEFAULT_DOC_TYPE = 'privacy_policy';
 /** The CDN URL of this script - reused when assembling paste snippets. */
 export const CDN_URL = 'https://cdn.jsdelivr.net/npm/@scadable/embed/dist/embed.js';
 
-/** Resolved configuration for a single mount point. */
-export interface MountOptions {
-  /** The public token from the SCADABLE app. */
-  token: string;
-  /** Which document to fetch. Default {@link DEFAULT_DOC_TYPE}. */
-  docType?: string;
-  /** Override the API base. Default `https://policy.scadable.com`. */
+/**
+ * Resolved configuration for a single mount point: a public token and a
+ * document type (default {@link DEFAULT_DOC_TYPE}), or a tenant and a document
+ * slug such as "privacy-policy".
+ */
+export type MountOptions = DocumentSource & {
+  /**
+   * Override the base. Default `https://policy.scadable.com` for a token and
+   * `https://files.scadable.com` for a tenant.
+   */
   baseUrl?: string;
-}
+};
 
-export type { Policy };
+export type { Policy, PublishedDocument };
 
 /** Read an attribute in either the `<div data-x>` or the `<scadable-policy x>` form. */
 function readAttr(el: Element, dataName: string, plainName: string): string | null {
   return el.getAttribute(dataName) ?? el.getAttribute(plainName);
 }
 
-/** Pull token / doc-type / base-url off an element, supporting both forms. */
+/** Pull the document's name and base-url off an element, supporting both forms. */
 function configFrom(el: Element): MountOptions | null {
+  const baseUrl = readAttr(el, 'data-base-url', 'base-url') ?? undefined;
+  const tenant = readAttr(el, 'data-tenant', 'tenant');
+  if (tenant) {
+    // A tenant wins over a token on the same element, so a snippet can be moved
+    // to its published document by adding two attributes.
+    const slug = readAttr(el, 'data-document', 'document');
+    if (!slug) {
+      console.warn('[scadable] skipping a .scadable-policy element with a tenant and no document');
+      return null;
+    }
+    return { tenant, document: slug, baseUrl };
+  }
   const token = readAttr(el, 'data-token', 'token');
   if (!token) {
-    // No token means nothing to fetch. Leave whatever is baked in and warn so
-    // the integrator notices the snippet is missing its one required value.
-    console.warn('[scadable] skipping a .scadable-policy element with no token');
+    // Nothing names a document. Leave whatever is baked in and warn so the
+    // integrator notices the snippet is missing its one required value.
+    console.warn('[scadable] skipping a .scadable-policy element with no token or tenant');
     return null;
   }
   const docType = readAttr(el, 'data-doc-type', 'doc-type') ?? DEFAULT_DOC_TYPE;
-  const baseUrl = readAttr(el, 'data-base-url', 'base-url') ?? undefined;
   return { token, docType, baseUrl };
 }
 
@@ -70,7 +90,7 @@ function configFrom(el: Element): MountOptions | null {
  * baked content is left untouched, so the page is never blank. Idempotent: an
  * element is only mounted once.
  */
-export async function mount(el: Element, opts?: MountOptions): Promise<Policy | null> {
+export async function mount(el: Element, opts?: MountOptions): Promise<Policy | PublishedDocument | null> {
   const node = el as HTMLElement;
   if (node.dataset.scadableMounted) return null;
   node.dataset.scadableMounted = '1';
@@ -79,19 +99,26 @@ export async function mount(el: Element, opts?: MountOptions): Promise<Policy | 
   if (!config) return null;
 
   try {
-    const policy = await fetchPolicy(config.token, {
-      docType: config.docType,
-      baseUrl: config.baseUrl,
-      // Always fresh in the browser - this is what keeps the visible copy live.
-      revalidate: false,
-    });
-    if (policy?.html) {
+    // Always fresh in the browser - this is what keeps the visible copy live.
+    const loaded =
+      config.tenant !== undefined
+        ? await fetchDocument(
+            { tenant: config.tenant, document: config.document },
+            { baseUrl: config.baseUrl, revalidate: false },
+          )
+        : await fetchPolicy(config.token, {
+            docType: config.docType,
+            baseUrl: config.baseUrl,
+            revalidate: false,
+          });
+    if (loaded?.html) {
       // Light DOM: set innerHTML directly so the host page's CSS applies and the
-      // self-styled fragment (it ships its own scoped <style>) renders as-is.
-      node.innerHTML = policy.html;
+      // self-styled fragment (it ships its own scoped <style>) renders as-is. A
+      // published document has already passed the allowlist, or is a link to it.
+      node.innerHTML = loaded.html;
       node.dataset.scadableState = 'live';
     }
-    return policy;
+    return loaded;
   } catch (err) {
     // Keep the baked snapshot. This is the whole point of the hybrid snippet:
     // the crawlable copy stays on the page even when the live fetch cannot run.
@@ -99,7 +126,11 @@ export async function mount(el: Element, opts?: MountOptions): Promise<Policy | 
     // debuggable instead of silently leaving a stale copy.
     node.dataset.scadableState = 'baked';
     node.dataset.scadableError = 'true';
-    console.warn(`[@scadable/embed] failed to load policy for token "${config.token}"`, err);
+    const what =
+      config.tenant !== undefined
+        ? `document "${config.document}" for tenant "${config.tenant}"`
+        : `policy for token "${config.token}"`;
+    console.warn(`[@scadable/embed] failed to load ${what}`, err);
     return null;
   }
 }
