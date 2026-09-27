@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "svelte": "^5.57.1",
-    "typescript": "^5.6.0"
+    "typescript": "^7.0.2"
   },
   "publishConfig": {
     "access": "public"
