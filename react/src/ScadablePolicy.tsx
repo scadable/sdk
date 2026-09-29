@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { documentSlug, fetchDocument, fetchPolicy, isAllowedHtml } from '@scadable/core';
+import { documentSlug, documentUrl, fetchDocument, fetchPolicy, isAllowedHtml } from '@scadable/core';
 import type { DocumentOwner, DocumentSource, FetchPolicyOptions, Policy } from '@scadable/core';
 
 /** How the document is shown, whichever way it is named. */
@@ -79,6 +79,14 @@ export function ScadablePolicy(props: ScadablePolicyProps) {
   const tenant = props.tenant;
   const slug = props.document;
 
+  const identity = JSON.stringify([token, docType, tenant, slug, baseUrl]);
+  const [loadedIdentity, setLoadedIdentity] = React.useState(identity);
+  const [attempt, setAttempt] = React.useState(0);
+  let directUrl: string | undefined;
+  if (tenant !== undefined) {
+    try { directUrl = documentUrl({ tenant, document: slug ?? '' }, { baseUrl }); } catch { /* Invalid props have no safe public destination. */ }
+  }
+  const safeInitial = tenant !== undefined && initialHtml !== undefined && !isAllowedHtml(initialHtml) ? undefined : initialHtml;
   const [html, setHtml] = React.useState<string | undefined>(() =>
     tenant !== undefined && initialHtml !== undefined && !isAllowedHtml(initialHtml) ? undefined : initialHtml,
   );
@@ -88,9 +96,11 @@ export function ScadablePolicy(props: ScadablePolicyProps) {
 
   React.useEffect(() => {
     let alive = true;
-    // Keep whatever is shown (initialHtml or the loading line) if the browser
-    // fetch is blocked (CSP), offline, or the token/API is bad, but make the
-    // failure visible: warn and mark the node so it is debuggable.
+    setLoadedIdentity(identity);
+    setHtml(safeInitial);
+    setVersion(undefined);
+    setUpdatedAt(null);
+    setErrored(false);
     const fail = (what: string) => (err: unknown) => {
       if (alive) setErrored(true);
       console.warn(`[@scadable/react] failed to load ${what}`, err);
@@ -99,7 +109,8 @@ export function ScadablePolicy(props: ScadablePolicyProps) {
     if (tenant !== undefined) {
       fetchDocument({ tenant, document: slug ?? '' }, { baseUrl, revalidate: false })
         .then((doc) => {
-          if (!alive || !doc.html) return;
+          if (!alive) return;
+          if (!doc.html) throw new Error('The published document was empty');
           setHtml(doc.html);
           setErrored(false);
         })
@@ -109,7 +120,8 @@ export function ScadablePolicy(props: ScadablePolicyProps) {
       if (baseUrl) opts.baseUrl = baseUrl;
       fetchPolicy(token ?? '', opts)
         .then((p: Policy) => {
-          if (!alive || !p?.html) return;
+          if (!alive) return;
+          if (!p?.html) throw new Error('The published policy was empty');
           setHtml(p.html);
           setVersion(p.version);
           setUpdatedAt(p.updated_at);
@@ -120,16 +132,24 @@ export function ScadablePolicy(props: ScadablePolicyProps) {
     return () => {
       alive = false;
     };
-  }, [token, docType, tenant, slug, baseUrl]);
+  }, [token, docType, tenant, slug, baseUrl, identity, safeInitial, attempt]);
+
+  const currentHtml = loadedIdentity === identity ? html : safeInitial;
+  const failed = loadedIdentity === identity && errored;
 
   return (
-    <div className={className} data-scadable-error={errored ? 'true' : undefined}>
-      {html !== undefined ? (
-        <div dangerouslySetInnerHTML={{ __html: html }} />
-      ) : (
-        <p style={{ fontSize: 12, color: '#9ca3af' }}>Loading…</p>
-      )}
-      {showVersion && updatedAt ? (
+    <div className={className} data-scadable-error={failed ? 'true' : undefined}>
+      {currentHtml !== undefined ? (
+        <div dangerouslySetInnerHTML={{ __html: currentHtml }} />
+      ) : !failed ? (
+        <p role="status" style={{ fontSize: 12, color: '#9ca3af' }}>Loading...</p>
+      ) : null}
+      {failed && <div role="alert">
+        <p>{currentHtml ? 'We could not refresh this document. The previously supplied copy is shown.' : 'We could not load this document.'}</p>
+        {directUrl && <a href={directUrl} target="_blank" rel="noopener noreferrer">Open the published document</a>}
+        {' '}<button type="button" onClick={() => setAttempt((n) => n + 1)}>Try again</button>
+      </div>}
+      {showVersion && loadedIdentity === identity && updatedAt ? (
         <p style={{ fontSize: 12, color: '#9ca3af', marginTop: 24 }}>
           Version {version}. Last updated {new Date(updatedAt).toLocaleDateString()}.
         </p>
